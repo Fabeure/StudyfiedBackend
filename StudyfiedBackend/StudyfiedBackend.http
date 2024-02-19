@@ -1,0 +1,6 @@
+@StudyfiedBackend_HostAddress = http://localhost:5084
+
+GET {{StudyfiedBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
