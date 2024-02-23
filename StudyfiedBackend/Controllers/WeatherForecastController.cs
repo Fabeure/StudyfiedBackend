@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Text.Json;
+using System.Text;
 
 namespace StudyfiedBackend.Controllers
 {
@@ -15,9 +18,16 @@ namespace StudyfiedBackend.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public string Get()
+        public IActionResult Get()
         {
-            return "salem";
+            // Dummy data for demonstration purposes
+            var students = new List<object>
+        {
+            new { Name = "Alice", Age = 20 },
+            new { Name = "Bob", Age = 22 },
+            new { Name = "Charlie", Age = 21 }
+        };
+            return Ok(students);
         }
     }
 }

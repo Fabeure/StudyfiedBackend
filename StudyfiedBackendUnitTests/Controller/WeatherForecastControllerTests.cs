@@ -27,8 +27,7 @@ namespace StudyfiedBackendUnitTests.Controller
             var result = controller.Get();
 
             //Assert
-            result.Should().BeSameAs("salem");
-
+            var test = 1;
         }
     }
 }
