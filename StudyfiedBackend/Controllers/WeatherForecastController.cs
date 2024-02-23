@@ -15,9 +15,9 @@ namespace StudyfiedBackend.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public bool Get()
+        public string Get()
         {
-            return weather;
+            return "salem";
         }
     }
 }
