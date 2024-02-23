@@ -23,9 +23,10 @@ namespace StudyfiedBackend.Controllers
             // Dummy data for demonstration purposes
             var students = new List<object>
         {
-            new { Name = "Alice", Age = 20 },
-            new { Name = "Bob", Age = 22 },
-            new { Name = "Charlie", Age = 21 }
+            new { Name = "Saber", Age = 20 },
+            new { Name = "Farah", Age = 22 },
+            new { Name = "Mohamed", Age = 22 },
+            new { Name = "Abdelhak", Age = 21}
         };
             return Ok(students);
         }
