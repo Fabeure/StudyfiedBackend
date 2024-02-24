@@ -31,7 +31,7 @@ namespace StudyfiedBackend.Controllers
 
         }
 
-        public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
+        private async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
         {
             try
             {
@@ -75,13 +75,20 @@ namespace StudyfiedBackend.Controllers
             return result.Success ? Ok(result) : BadRequest(result.Message);
         }
 
-        public async Task<LoginResponse> LoginAsync(LoginRequest request)
+
+        private async Task<LoginResponse> LoginAsync(LoginRequest request)
         {
             try
             {
 
                 var user = await _userManager.FindByEmailAsync(request.Email);
-                if (user is null) return new LoginResponse { Message = "Invalid email/password", Success = false };
+                if (user is null || user.Email is null) {
+                    return new LoginResponse { Message = "Invalid email/password", Success = false };
+                }
+                else if (user.UserName is null)
+                {
+                    return new LoginResponse { Message = "Invalid username", Success = false };
+                }
 
                 //all is well if ew reach here
                 var claims = new List<Claim>
@@ -109,9 +116,9 @@ namespace StudyfiedBackend.Controllers
                 {
                     AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                     Message = "Login Successful",
-                    Email = user?.Email,
+                    Email = user.Email,
                     Success = true,
-                    UserId = user?.Id.ToString()
+                    UserId = user.Id.ToString()
                 };
             }
             catch (Exception ex)
