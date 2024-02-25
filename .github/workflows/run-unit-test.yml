@@ -24,4 +24,4 @@ jobs:
         run: dotnet --version 
 
       - name: Run Unit Tests
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test
