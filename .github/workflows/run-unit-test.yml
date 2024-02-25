@@ -12,7 +12,7 @@ jobs:
         dotnet-version: [ '8.0.x' ]
 
     steps:
-      - name: Checkout Main 
+      - name: Checkout Branch 
         uses: actions/checkout@v4
 
       - name: Setup dotnet ${{ matrix.dotnet-version }}

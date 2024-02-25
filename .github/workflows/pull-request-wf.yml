@@ -2,7 +2,7 @@ name: Pull Request workflow
 
 on:
   pull_request:
-      types: [opened, edited, synchronize]
+      types: [opened, synchronize]
       branches: [ dev ]
 
         
@@ -10,36 +10,20 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        dotnet-version: [ '8.0.x' ]
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+      - name: Checkout Source Branch  
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
-
-      - name: Setup Node
-        uses: actions/setup-node@v1
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
         with:
-          node-version: 16
-
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-
-      - name: Build project
-        run: npm run build
+          dotnet-version: ${{ matrix.dotnet-version }}
 
       - name: Run Unit Tests
-        run: npm test
+        run: dotnet test
 
-
-
-
-#write a workflow file that will run the unit tests on the pull request
-# Path: pull-request-wf.yml
-# Compare this snippet from run-unit-test.yml:
-# name: Run Back-End Unit Tests
-#
-
-# on:
-#   workflow_dispatch    
