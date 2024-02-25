@@ -1,0 +1,45 @@
+name: Pull Request workflow
+
+on:
+  pull_request:
+      types: [opened, edited, synchronize]
+      branches: [ dev ]
+
+        
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run Unit Tests
+        run: npm test
+
+
+
+
+#write a workflow file that will run the unit tests on the pull request
+# Path: pull-request-wf.yml
+# Compare this snippet from run-unit-test.yml:
+# name: Run Back-End Unit Tests
+#
+
+# on:
+#   workflow_dispatch    

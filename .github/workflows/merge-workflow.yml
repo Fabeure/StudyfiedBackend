@@ -1,0 +1,21 @@
+name : Merge to dev 
+
+on : 
+   workflow_dispatch
+
+jobs:
+  merge-to-dev:
+    name: merge addwf -> dev     
+    runs-on: ubuntu-latest
+    
+    steps:
+        - name : merge addwf to dev
+          uses: tukasz/direct-merge-action@master
+          with:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            source-branch: AddWorkFlows
+            target-branch: dev
+            commit-message: "Auto merge"
+         
+
+	
