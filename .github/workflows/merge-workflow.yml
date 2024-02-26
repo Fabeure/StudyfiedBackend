@@ -1,12 +1,11 @@
-name : Merge dev to main 
+name: Merge dev branch to main
 
-on : 
+on:
   workflow_dispatch
-  
 
 jobs:
-  merge-to-dev:
-    name: merge dev -> main     
+  merge-develop-to-main:
+    name: Merge dev -> main
     runs-on: ubuntu-latest
     
     steps:
@@ -17,6 +16,3 @@ jobs:
             source-branch: dev
             target-branch: main
             commit-message: "Auto merge"
-         
-
-	
