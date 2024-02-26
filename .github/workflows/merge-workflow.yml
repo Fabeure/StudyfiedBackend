@@ -1,0 +1,22 @@
+name : Merge dev to main 
+
+on : 
+  workflow_dispatch
+  
+
+jobs:
+  merge-to-dev:
+    name: merge dev -> main     
+    runs-on: ubuntu-latest
+    
+    steps:
+        - name : merge dev to main
+          uses: tukasz/direct-merge-action@master
+          with:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            source-branch: dev
+            target-branch: main
+            commit-message: "Auto merge"
+         
+
+	
