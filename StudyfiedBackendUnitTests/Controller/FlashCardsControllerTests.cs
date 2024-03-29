@@ -1,15 +1,6 @@
-﻿using DotnetGeminiSDK.Client.Interfaces;
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using StudyfiedBackend.Controllers;
 using StudyfiedBackend.Controllers.FlashCards;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudyfiedBackendUnitTests.Controller
 {
@@ -31,7 +22,7 @@ namespace StudyfiedBackendUnitTests.Controller
             var topic = "Chickens";
             var expectedResultRegex = "";
             //Act
-            var result = controller.getFlashCards(topic);
+            var result = controller.get(topic);
 
             //Assert
             var actualResult = result.ResultItem;
