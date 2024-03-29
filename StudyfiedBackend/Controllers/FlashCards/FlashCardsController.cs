@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudyfiedBackend.BaseResponse;
+using StudyfiedBackend.Models;
 
 namespace StudyfiedBackend.Controllers.FlashCards
 {
@@ -7,17 +8,17 @@ namespace StudyfiedBackend.Controllers.FlashCards
     [ApiController]
     public class FlashCardsController : ControllerBase
     {
-        private readonly IFlashCardsService _flashCardsService;
+        private readonly IFlashCardsService flashCardsService;
 
         public FlashCardsController(IFlashCardsService flashCardsService)
         {
-            _flashCardsService = flashCardsService;
+            this.flashCardsService = flashCardsService;
         }
 
         [HttpPost("getFlashCard")]
-        public BaseResponse<Models.FlashCard> getFlashCards(string topic)
+        public BaseResponse<FlashCard> get(string topic)
         {
-            return _flashCardsService.getFlashCardResponse(topic).Result;
+            return flashCardsService.getFlashCardResponse(topic).Result;
         }
 
     }

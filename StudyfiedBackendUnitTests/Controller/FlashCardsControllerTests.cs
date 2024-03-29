@@ -15,30 +15,29 @@ namespace StudyfiedBackendUnitTests.Controller
 {
     public class FlashCardsControllerTests
     {
-        private readonly IGeminiClient _geminiClient;
+        private readonly IFlashCardsService _flashCardsService;
 
         public FlashCardsControllerTests()
         {
-            _geminiClient = A.Fake<IGeminiClient>(); 
+            _flashCardsService = A.Fake<IFlashCardsService>(); 
         }
 
         [Fact]
         public void getFlashCardsTest()
         {
             //Arrange
-            var controller = new FlashCardsController(_geminiClient);
+            var controller = new FlashCardsController(_flashCardsService);
 
             var topic = "Chickens";
             var expectedResultRegex = "";
             //Act
-            var result = controller.getFlashCardResponse(topic);
+            var result = controller.getFlashCards(topic);
 
             //Assert
-            result.Should().BeOfType<OkObjectResult>();
-            var actualStudents = ((OkObjectResult)result.Result).Value as List<Object>;
+            var actualResult = result.ResultItem;
 
-            actualStudents.Should().NotBeNull();
-            actualStudents.Should().BeEquivalentTo("");
+            actualResult.Should().NotBeNull();
+            actualResult.Should().BeEquivalentTo("");
         }
     }
 }

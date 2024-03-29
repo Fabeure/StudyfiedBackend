@@ -1,9 +1,10 @@
 ﻿using StudyfiedBackend.BaseResponse;
+using StudyfiedBackend.Models;
 
 namespace StudyfiedBackend.Controllers.FlashCards
 {
     public interface IFlashCardsService
     {
-        public Task<BaseResponse<Models.FlashCard>> getFlashCardResponse(string topic);
+        public Task<BaseResponse<FlashCard>> getFlashCardResponse(string topic);
     }
 }

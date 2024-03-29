@@ -1,5 +1,5 @@
 ﻿using DotnetGeminiSDK.Model.Response;
-using Microsoft.AspNetCore.Mvc;
+using StudyfiedBackend.Models;
 using System.Text.RegularExpressions;
 
 namespace StudyfiedBackend.Controllers.FlashCards
@@ -7,16 +7,16 @@ namespace StudyfiedBackend.Controllers.FlashCards
     public static class FlashCardsHelpers
     {
         public static string filterRegEx = "";
-        public static Models.FlashCard processFlashCardResponse(GeminiMessageResponse response)
+        public static FlashCard processFlashCardResponse(GeminiMessageResponse response)
         {
             string responseText = response.Candidates[0].Content.Parts[0].Text;
-            string[] flashCardStrings = doProcessFlashCardReponse(data: responseText);
-            Models.FlashCard flashCard = buildFlashCardResponse(flashCardStrings);
+            string[] flashCardContents = doProcessFlashCardObject(data: responseText);
+            FlashCard flashCard = buildFlashCardObject(flashCardContents);
 
             return flashCard;
         }
 
-        public static string[] doProcessFlashCardReponse(string data)
+        public static string[] doProcessFlashCardObject(string data)
         {
             if (string.IsNullOrEmpty(data))
             {
@@ -26,9 +26,9 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return data.Split(',');
         }
 
-        public static Models.FlashCard buildFlashCardResponse(string[] items)
+        public static FlashCard buildFlashCardObject(string[] items)
         {
-            Models.FlashCard flashCard = new Models.FlashCard(items);
+            FlashCard flashCard = new FlashCard(items);
             return flashCard;
         }
     }

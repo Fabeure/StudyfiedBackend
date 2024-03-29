@@ -14,10 +14,8 @@
             {
                 case 0:
                     return helpers[HelperCode] + prompt;
-                    break;
                 case 1:
                     return prompt + helpers[HelperCode];
-                    break;
                 default:
                     return prompt;
             }
