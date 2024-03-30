@@ -19,13 +19,6 @@ namespace StudyfiedBackend.BaseResponse
 
         public bool IsSuccess => this.IsSuccess();
         public bool IsFailed => this.IsFailed();
-
-        public static BaseResponse<T> FromResult<T>(T resultItem, ResultCodeEnum code = ResultCodeEnum.Success, string userMessage="")
-            where T : class
-            => new BaseResponse<T>(code, resultItem, userMessage);
-
-        public static BaseResponse Success(string userMessage)
-            => new BaseResponse(ResultCodeEnum.Success, userMessage);
     }
 
     public class BaseResponse<T> : BaseResponse
@@ -42,9 +35,6 @@ namespace StudyfiedBackend.BaseResponse
 
         [DataMember]
         public T ResultItem { get; set; }
-
-        public static BaseResponse<T> FromResult(T resultItem,  ResultCodeEnum code = ResultCodeEnum.Success, string userMessage="")
-            => new BaseResponse<T>(code, resultItem, userMessage);
 
     }
 
