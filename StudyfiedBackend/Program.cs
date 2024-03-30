@@ -1,10 +1,12 @@
 using AspNetCore.Identity.MongoDbCore.Extensions;
 using AspNetCore.Identity.MongoDbCore.Infrastructure;
+using DotnetGeminiSDK;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using StudyfiedBackend.Controllers.FlashCards;
 using StudyfiedBackend.Models;
 using StudyfiedBackend.Services;
 using System.Text;
@@ -49,6 +51,8 @@ builder.Services.ConfigureMongoDbIdentityUserOnly<ApplicationUser, Guid>(mongoDb
     .AddDefaultTokenProviders();
 
 
+builder.Services.AddScoped<IFlashCardsService, FlashCardsService>();
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -79,6 +83,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 builder.Services.AddSingleton<MongoDBService>();
 
+builder.Services.AddGeminiClient(config =>
+{
+    config.ApiKey = builder.Configuration.GetValue<string>("GeminiApiKey");
+});
 builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
     builder => builder
