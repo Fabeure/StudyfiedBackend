@@ -5,6 +5,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
 {
     public interface IFlashCardsService
     {
-        public Task<BaseResponse<FlashCard>> getFlashCardResponse(string topic);
+        public BaseResponse<FlashCard> getFlashCard(string topic);
+        public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId);
     }
 }

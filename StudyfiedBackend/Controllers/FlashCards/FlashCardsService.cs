@@ -2,17 +2,20 @@
 using StudyfiedBackend.Models;
 using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.Controllers.Gemini;
+using StudyfiedBackend.DataLayer;
 
 namespace StudyfiedBackend.Controllers.FlashCards
 {
     public class FlashCardsService : IFlashCardsService
     {
         private readonly IGeminiClient _geminiClient;
+        private readonly IMongoRepository<FlashCard> _flashCardRepository;
 
-        public FlashCardsService(IGeminiClient geminiClient) {
+        public FlashCardsService(IGeminiClient geminiClient, IMongoContext context) {
             _geminiClient = geminiClient;
+            _flashCardRepository = context.GetRepository<FlashCard>();
         }
-        public async Task<BaseResponse<FlashCard>> getFlashCardResponse(string topic)
+        public BaseResponse<FlashCard> getFlashCard(string topic)
         {
             if (topic == null || topic == "")
             {
@@ -21,7 +24,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
 
             topic = PromptHelper.addHelperToPrompt(topic, 0, 0);
 
-            var geminiResponse = await GenericGeminiClient.GetTextPrompt(_geminiClient, topic);
+            var geminiResponse = GenericGeminiClient.GetTextPrompt(_geminiClient, topic).Result;
 
             if (geminiResponse != null)
             {
@@ -31,6 +34,15 @@ namespace StudyfiedBackend.Controllers.FlashCards
             {
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null);
             }
+        }
+        public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId)
+        {
+            FlashCard addedFlashCard = _flashCardRepository.CreateAsync(flashCardWithUserId).Result;
+            if (addedFlashCard != null)
+            {
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, $"FlashCard added successfully for user {flashCardWithUserId.userId}");
+            }
+            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"FlashCard not added for user {flashCardWithUserId.userId}");
         }
     }
 }
