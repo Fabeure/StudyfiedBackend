@@ -11,11 +11,12 @@ namespace StudyfiedBackend.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
-        public string[] items { get; set; }
+
+        public Dictionary<string, string> items { get; set; }
 
         public string? userId { get; set; }
 
-        public FlashCard(string[] items, string userId = "NA")
+        public FlashCard(Dictionary<string, string> items, string userId = "NA")
         {
             this.items = items;
             this.userId = userId;
