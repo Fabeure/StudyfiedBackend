@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using StudyfiedBackend.Dtos;
 using StudyfiedBackend.Models;
 
-namespace StudyfiedBackend.Controllers.Authentication
+namespace StudyfiedBackend.Controllers
 {
     [ApiController]
     [Route("api/v1/authenticate")]
@@ -81,8 +81,7 @@ namespace StudyfiedBackend.Controllers.Authentication
             try
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
-                if (user is null || user.Email is null)
-                {
+                if (user is null || user.Email is null) {
                     return new LoginResponse { Message = "Invalid email/password", Success = false };
                 }
                 else if (user.UserName is null)

@@ -18,13 +18,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
         [HttpPost("getFlashCard")]
         public BaseResponse<FlashCard> get([FromBody] string topic)
         {
-            return flashCardsService.getFlashCard(topic);
-        }
-
-        [HttpPost("persistFlashCard")]
-        public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId)
-        {
-            return flashCardsService.persistFlashCard(flashCardWithUserId);
+            return flashCardsService.getFlashCardResponse(topic).Result;
         }
 
         [HttpGet("getExistingFlashCard")]
