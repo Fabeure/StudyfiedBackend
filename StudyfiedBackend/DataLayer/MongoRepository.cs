@@ -20,7 +20,7 @@ namespace StudyfiedBackend.DataLayer
 
         public async Task<T> GetByIdAsync(string id)
         {
-            var filter = Builders<T>.Filter.Eq("_id", ObjectId.Parse(id));
+            var filter = Builders<T>.Filter.Eq("_id", id);
             return await _collection.FindAsync(filter).Result.FirstOrDefaultAsync();
         }
 

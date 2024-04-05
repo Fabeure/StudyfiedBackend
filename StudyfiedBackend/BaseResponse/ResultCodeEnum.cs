@@ -14,6 +14,9 @@ namespace StudyfiedBackend.BaseResponse
         Failed = 1,
 
         [EnumMember]
+        Unauthorized = 10,
+
+        [EnumMember]
         NotAdmin = 20,
 
         [EnumMember]

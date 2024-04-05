@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.Models;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace StudyfiedBackend.Controllers.Authentication
 {
@@ -14,10 +15,10 @@ namespace StudyfiedBackend.Controllers.Authentication
             this.userService = userService;
         }
 
-        [HttpGet("allUsers")]
-        public BaseResponse<List<ApplicationUser>> getAllUsers()
+        [HttpGet("test")]
+        public BaseResponse<ApplicationUser> test(string token)
         {
-            return userService.GetAllUsersAsync();
+            return userService.AuthenticateTokenAndGetUser(token);
         }
     }
 }
