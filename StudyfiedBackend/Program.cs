@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-using StudyfiedBackend.Controllers.Authentication;
 using StudyfiedBackend.Controllers.FlashCards;
-using StudyfiedBackend.DataLayer;
 using StudyfiedBackend.Models;
+using StudyfiedBackend.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,8 +50,8 @@ builder.Services.ConfigureMongoDbIdentityUserOnly<ApplicationUser, Guid>(mongoDb
     .AddSignInManager<SignInManager<ApplicationUser>>()
     .AddDefaultTokenProviders();
 
-builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
+builder.Services.AddScoped<IFlashCardsService, FlashCardsService>();
 
 builder.Services.AddAuthentication(x =>
 {
@@ -76,13 +75,13 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-// Add depencies here when adding a new service
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IFlashCardsService, FlashCardsService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddSingleton<IMongoContext, MongoContext>();
-
-
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
+builder.Services.AddSingleton<MongoDBService>();
 
 builder.Services.AddGeminiClient(config =>
 {
@@ -95,11 +94,6 @@ builder.Services.AddCors(options =>
     .WithOrigins(origins)
     .AllowAnyMethod()
     .AllowCredentials()));
-
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
