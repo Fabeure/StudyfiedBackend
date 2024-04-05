@@ -5,7 +5,11 @@
 
         private static string[] helpers =
         {
-            " Please make sure that your reply will be in the form of comma seperated strings, it is imperative that the elements of your response are seperated by a comma,do not include return to lines, do not include any special chars other than commas.",
+            "i want you to generate me 5 question answer pairs. Make sure its exactly 5 pairs. You response should be a plain string, and only follow the formatting rules i will give you. Here is the topic : ",
+            @" each question and detailled answer should be seperated by a ':', and each pair of question+answer should be seperated by a ';'. Please
+            do not include any return to lines, and give me the question, followed by a ':', followed by the answer, followed by a ';' and then the next question answer pair so on and so on
+            of course replace question and aswer with the actual question and actual answer
+            DO NOT FORMAT THE RESPONSE IN ANY OTHER WAY, DO NOT WRITE THE WORD QUESTION OR ANSWER FOR ME"
         };
 
         public static string addHelperToPrompt(string prompt, int HelperCode, int position)

@@ -27,5 +27,11 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return flashCardsService.persistFlashCard(flashCardWithUserId);
         }
 
+        [HttpGet("getExistingFlashCard")]
+        public BaseResponse<FlashCard> getExistingFlashCard(string id)
+        {
+            return flashCardsService.getExistingFlashCard(id);
+        }
+
     }
 }

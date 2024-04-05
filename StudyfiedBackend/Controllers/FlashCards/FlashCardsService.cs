@@ -23,12 +23,17 @@ namespace StudyfiedBackend.Controllers.FlashCards
             }
 
             topic = PromptHelper.addHelperToPrompt(topic, 0, 0);
+            topic = PromptHelper.addHelperToPrompt(topic, 1, 1);
 
             var geminiResponse = GenericGeminiClient.GetTextPrompt(_geminiClient, topic).Result;
 
             if (geminiResponse != null)
             {
-                return new BaseResponse<FlashCard>(ResultCodeEnum.Success, FlashCardsHelpers.processFlashCardResponse(geminiResponse), "Succesfully fetched FlashCards");
+                FlashCard flashCard = FlashCardsHelpers.processFlashCardResponse(geminiResponse);
+                if (!FlashCardsHelpers.validateFlashCardResult(flashCard)) {
+                    return getFlashCard(topic);
+                }
+                return new BaseResponse<FlashCard>(ResultCodeEnum.Success, flashCard, "Succesfully fetched FlashCards");
             }
             else
             {
@@ -44,5 +49,26 @@ namespace StudyfiedBackend.Controllers.FlashCards
             }
             return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"FlashCard not added for user {flashCardWithUserId.userId}");
         }
+
+        public BaseResponse<FlashCard> getExistingFlashCard(string id)
+        {
+            FlashCard flashCard = _flashCardRepository.GetByIdAsync(id).Result;
+            if (flashCard != null)
+            {
+                return new BaseResponse<FlashCard>(ResultCodeEnum.Success, flashCard, $"Succesfully fetched flash card {flashCard.Id}");
+            }
+            return new BaseResponse<FlashCard> (ResultCodeEnum.Failed, null, $"No flash card with id {id} found");
+        }
+
+        public BaseResponse<List<FlashCard>> getBatchExistingFlashCard(string[] id)
+        {
+            List<FlashCard> flashCards = _flashCardRepository.GetDocumentsByIdsAsync(id).Result.ToList();
+            if (flashCards != null)
+            {
+                return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Success, flashCards, "flashCards fetched");
+            }
+            return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Failed, null, "failed to fetch flashCards");
+        }
+
     }
 }
