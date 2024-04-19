@@ -46,7 +46,6 @@ var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
 
 };
 
-
 builder.Services.ConfigureMongoDbIdentityUserOnly<ApplicationUser, Guid>(mongoDbIdentityConfig)
     .AddUserManager<UserManager<ApplicationUser>>()
     .AddSignInManager<SignInManager<ApplicationUser>>()
