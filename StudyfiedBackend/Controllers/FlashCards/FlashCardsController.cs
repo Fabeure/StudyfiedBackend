@@ -3,7 +3,7 @@ using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.Models;
 
 namespace StudyfiedBackend.Controllers.FlashCards
-{
+{   
     [Route("api/[controller]")]
     [ApiController]
     public class FlashCardsController : ControllerBase
