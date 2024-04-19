@@ -22,10 +22,5 @@ namespace StudyfiedBackend.Controllers.Resumes
         {
             return resumesService.getResume(encodedpdf);
         }
-
-        
-
-
-
     }
 }

@@ -58,10 +58,7 @@ namespace StudyfiedBackend.Controllers.Resumes
 
                 if (geminiResponse != null)
                 {
-                       /* string responseText = geminiResponse.Candidates[0].Content.Parts[0].Text;*/
-
                         main_content = main_content + geminiResponse.Candidates[0].Content.Parts[0].Text;
-
                 }
 
                 else
@@ -70,8 +67,6 @@ namespace StudyfiedBackend.Controllers.Resumes
                 }
 
             }
-
-          
              }
 
             var prompt2 = PromptHelper.addHelperToPrompt(main_content, 3, 0);

@@ -9,6 +9,5 @@ namespace StudyfiedBackend.Controllers.FlashCards
         public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId);
         public BaseResponse<FlashCard> getExistingFlashCard(string id);
         public BaseResponse<List<FlashCard>> getBatchExistingFlashCard(string[] id);
-
     }
 }
