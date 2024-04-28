@@ -21,12 +21,12 @@ namespace StudyfiedBackend.Models
         public Dictionary<Question, List<Response>> quizQuestions { get; set; }
 
 
-        public Quiz(string topic, string difficulty, int numberOfQuestion, Dictionary<Question, List<Response>> quizQuestions = null, string userId = "NA")
+        public Quiz(string topic, string difficulty, int numberOfQuestion, string userId = "NA")
         {
             this.userId = userId;
             this.topic = topic;
             this.difficulty = difficulty;
-            this.quizQuestions = quizQuestions;
+            this.quizQuestions = new Dictionary<Question, List<Response>>();
             this.numberOfQuestion = numberOfQuestion;
         }
 

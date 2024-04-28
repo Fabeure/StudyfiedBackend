@@ -7,7 +7,6 @@ namespace StudyfiedBackend.Models
     [CollectionName("FlashCards")]
     public class FlashCard
     {
-
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
