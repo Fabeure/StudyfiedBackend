@@ -14,7 +14,7 @@ namespace StudyfiedBackend.Controllers.Quize
             string prompt = "i want you to generate me "+numberOfQuestions+" "+difficulty+" multichoice questions. Make sure its exactly "+numberOfQuestions+" questions. You response should be a plain string, " +
                 "and only follow the formatting rules i will give you. Here is the topic : " +
                 topic + " the format is that questions should be seperated by a ';' between every single one of them. " +
-                "Please do not include any return to lines, and give me the question followed by \";\" ,and only \";\" without any return to lines" +
+                "Please do not include any return to lines, and give me the question followed by \";\" ,and only \";\" without any return to lines DO NOT INCLUDE ANY RETURN TO LINES '\n'" +
                 "DO NOT FORMAT THE RESPONSE IN ANY OTHER WAY, DO NOT WRITE THE WORD QUESTION FOR ME";
 
             var geminiResponse = GenericGeminiClient.GetTextPrompt(geminiClient, prompt).Result;
@@ -45,7 +45,7 @@ namespace StudyfiedBackend.Controllers.Quize
                 string[] responsesArray = geminiResponse.Candidates[0].Content.Parts[0].Text.Split(';');
                 foreach (string response in responsesArray)
                 {
-                    string[] parts = response.Split(":;");
+                    string[] parts = response.Split(":");
                     if (parts.Length == 2)
                     {
                         string validity = parts[1].ToLower();

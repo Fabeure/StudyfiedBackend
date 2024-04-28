@@ -8,6 +8,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using StudyfiedBackend.Controllers.Authentication;
 using StudyfiedBackend.Controllers.FlashCards;
+using StudyfiedBackend.Controllers.Quize;
 using StudyfiedBackend.DataLayer;
 using StudyfiedBackend.Models;
 using System.Text;
@@ -80,6 +81,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped<IFlashCardsService, FlashCardsService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddSingleton<IMongoContext, MongoContext>();
 
 
