@@ -19,7 +19,7 @@ namespace StudyfiedBackend.Controllers.Authentication
             var decodedToken = handler.ReadJwtToken(token);
             var id = decodedToken.Claims.ElementAt(0).Value;
             var email = decodedToken.Claims.ElementAt(1).Value;
-            return new UserToken(id, email, DateTime.Now.AddHours(-1));
+            return new UserToken(id, email, DateTime.Now.AddHours(1));
         }
         public static ApplicationUser processToken(string token, IMongoRepository<ApplicationUser> userRepository)
         {
