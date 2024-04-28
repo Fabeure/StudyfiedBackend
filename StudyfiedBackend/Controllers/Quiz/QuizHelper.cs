@@ -11,7 +11,9 @@ namespace StudyfiedBackend.Controllers.Quize
         public static List<Question> GenerateQuestion(string topic, string difficulty,int numberOfQuestions, IGeminiClient geminiClient)
         {
             List<Question> questions = new List<Question>();
-            string prompt = "i want you to generate me "+numberOfQuestions+" "+difficulty+" multichoice questions. Make sure its exactly "+numberOfQuestions+" questions. You response should be a plain string, " +
+            var questionByDifficulty = numberOfQuestions + " " + difficulty;
+
+            string prompt = "i want you to generate me "; +questionByDifficulty+" multichoice questions. Make sure its exactly "+numberOfQuestions+" questions. You response should be a plain string, " +
                 "and only follow the formatting rules i will give you. Here is the topic : " +
                 topic + " the format is that questions should be seperated by a ';' between every single one of them. " +
                 "Please do not include any return to lines, and give me the question followed by \";\" ,and only \";\" without any return to lines DO NOT INCLUDE ANY RETURN TO LINES '\n'" +
@@ -32,7 +34,7 @@ namespace StudyfiedBackend.Controllers.Quize
         {
             List<Response> responses = new List<Response>();
             string prompt = "i want you to generate me 4 answer option and validity(true/false) pairs. Make sure its exactly 4 pairs. You response should be a " +
-                "plain string, and only follow the formatting rules i will give you. Here is the question :"+question.question +
+                "plain string, and only follow the formatting rules i will give you. Here is the question :" + question.question +
                 "each option and validity should be seperated by only and only a ':', and each pair of option+validity should be seperated by a" +
                 " ';'. Please do not include any return to lines, and give me the option, followed by only a ':', followed by the its validity, " +
                 "followed by a ';' and then the next option validity pair so on and so on of course replace option and validity with the actual " +
@@ -48,7 +50,7 @@ namespace StudyfiedBackend.Controllers.Quize
                     string[] parts = response.Split(":");
                     if (parts.Length == 2)
                     {
-                        string validity = parts[1].ToLower();
+                        string validity = parts[1].ToLower().Trim();
                         if (validity == "true")
                         {
                             responses.Add(new Response(parts[0], true));
