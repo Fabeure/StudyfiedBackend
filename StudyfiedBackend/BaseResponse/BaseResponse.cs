@@ -7,7 +7,7 @@ namespace StudyfiedBackend.BaseResponse
         [DataMember]
         public ResultCodeEnum ResultCode { get; set; }
         [DataMember]
-        public string UserMessage { get; set; }
+        public string? UserMessage { get; set; }
 
         public BaseResponse(ResultCodeEnum code, string userMessage = "")
         {
@@ -26,7 +26,7 @@ namespace StudyfiedBackend.BaseResponse
     {
         public BaseResponse() { }
 
-        public BaseResponse(ResultCodeEnum code, T resultItem, string userMessage="")
+        public BaseResponse(ResultCodeEnum code, T? resultItem, string userMessage="")
             : base(code)
         {
             ResultItem = resultItem;
@@ -34,7 +34,7 @@ namespace StudyfiedBackend.BaseResponse
         }
 
         [DataMember]
-        public T ResultItem { get; set; }
+        public T? ResultItem { get; set; }
 
     }
 
@@ -43,7 +43,7 @@ namespace StudyfiedBackend.BaseResponse
     {
         public PrimitiveBaseResponse() { }
 
-        public PrimitiveBaseResponse(ResultCodeEnum code, T resultItem, string userMessage="")
+        public PrimitiveBaseResponse(ResultCodeEnum code, T? resultItem, string userMessage="")
           : base(code)
         {
             ResultItem = resultItem;
@@ -51,6 +51,6 @@ namespace StudyfiedBackend.BaseResponse
         }
 
         [DataMember]
-        public T ResultItem { get; set; }
+        public T? ResultItem { get; set; }
     }
 }

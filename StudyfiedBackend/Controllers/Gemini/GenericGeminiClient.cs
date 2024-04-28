@@ -1,7 +1,6 @@
 ﻿using DotnetGeminiSDK.Client.Interfaces;
 using DotnetGeminiSDK.Model;
 using DotnetGeminiSDK.Model.Response;
-using Microsoft.AspNetCore.Mvc;
 
 namespace StudyfiedBackend.Controllers.Gemini
 {
@@ -22,9 +21,9 @@ namespace StudyfiedBackend.Controllers.Gemini
             }
         }
 
-        public static async Task<GeminiMessageResponse> getImagePrompt(IGeminiClient geminiClient, string textPrompt, string image)
+        public static async Task<GeminiMessageResponse> getImagePrompt(IGeminiClient geminiClient, string textPrompt, string base64image)
         {
-            var response = await geminiClient.ImagePrompt(textPrompt, image, ImageMimeType.Jpeg);
+            var response = await geminiClient.ImagePrompt(textPrompt, base64image, ImageMimeType.Jpeg);
 
             if (response != null)
             {

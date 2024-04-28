@@ -8,6 +8,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using StudyfiedBackend.Controllers.Authentication;
 using StudyfiedBackend.Controllers.FlashCards;
+using StudyfiedBackend.Controllers.Resumes;
 using StudyfiedBackend.Controllers.Quize;
 using StudyfiedBackend.DataLayer;
 using StudyfiedBackend.Models;
@@ -20,7 +21,6 @@ string[] origins = { "https://fabeure.github.io", "https://localhost:5173" };
 BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.BsonType.String));
 BsonSerializer.RegisterSerializer(new DateTimeSerializer(MongoDB.Bson.BsonType.String));
 BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(MongoDB.Bson.BsonType.String));
-
 
 var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
 {
@@ -46,14 +46,12 @@ var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
 
 };
 
-
 builder.Services.ConfigureMongoDbIdentityUserOnly<ApplicationUser, Guid>(mongoDbIdentityConfig)
     .AddUserManager<UserManager<ApplicationUser>>()
     .AddSignInManager<SignInManager<ApplicationUser>>()
     .AddDefaultTokenProviders();
 
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
-
 
 builder.Services.AddAuthentication(x =>
 {
@@ -73,18 +71,16 @@ builder.Services.AddAuthentication(x =>
         ValidateLifetime = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("eyJhbGciOiJIUzI1NiJ9.ew0KICAic3ViIjogIjEyMzQ1Njc4OTAiLA0KICAibmFtZSI6ICJBbmlzaCBOYXRoIiwNCiAgImlhdCI6IDE1MTYyMzkwMjINCn0.EH_mTmtyJ-Heekz3O6FzVVeDxFt9-UT_5D4oom0tyc0")),
         ClockSkew = TimeSpan.Zero
-
     };
 });
 
 // Add depencies here when adding a new service
 
 builder.Services.AddScoped<IFlashCardsService, FlashCardsService>();
+builder.Services.AddScoped<IResumesService, ResumesService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddSingleton<IMongoContext, MongoContext>();
-
-
 
 builder.Services.AddGeminiClient(config =>
 {
@@ -97,7 +93,6 @@ builder.Services.AddCors(options =>
     .WithOrigins(origins)
     .AllowAnyMethod()
     .AllowCredentials()));
-
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
