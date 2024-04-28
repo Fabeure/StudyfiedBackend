@@ -22,23 +22,19 @@ namespace StudyfiedBackend.Controllers.Resumes
             _resumeRepository = context.GetRepository<Resume>();
         }
 
-        //will recieve the string64 encoded pdf and return the resume object
-        public BaseResponse<Resume> getResume(string encodedpdf)
+        //will recieve the string64 encoded pdf and return the resume object (each page is summarized independently)
+        public BaseResponse<Resume> getResume(string encodedPdf)
         {
-            if (encodedpdf == null || encodedpdf == "")
+            if (encodedPdf == null || encodedPdf == "")
             {
-                return new BaseResponse<Resume>(ResultCodeEnum.Failed, null,"empty pdf");
+                return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "empty pdf");
             }
 
-            var prompt = PromptHelper.addHelperToPrompt("", 2, 0);
+            PdfDocument doc = ResumesHelpers.getPdfFromString64(encodedPdf);
 
-            string main_content = "";
+            string prompt = PromptHelper.addHelperToPrompt("", 2, 0);
 
-            MemoryStream ms = new MemoryStream(Convert.FromBase64String(encodedpdf));
-
-            PdfDocument doc = new PdfDocument();
-
-            doc.LoadFromStream(ms);
+            Resume resumeResult = new Resume();
 
             for (int i = 0; i < doc.Pages.Count; i++)
             { 
@@ -50,42 +46,36 @@ namespace StudyfiedBackend.Controllers.Resumes
 
                     byte[] imageBytes = ms2.ToArray();
 
-                    string base64String = Convert.ToBase64String(imageBytes);
+                    string base64image = Convert.ToBase64String(imageBytes);
 
-                    var geminiResponse = GenericGeminiClient.getImagePrompt(_geminiClient, prompt, base64String).Result;
+                    var geminiResponse = GenericGeminiClient.getImagePrompt(_geminiClient, prompt, base64image).Result;
 
                     if (geminiResponse != null)
-                        {
-                            main_content = main_content + geminiResponse.Candidates[0].Content.Parts[0].Text;
-                        }
+                    {
+                        var detailledImageContent = geminiResponse.Candidates[0].Content.Parts[0].Text;
+                        var imageContentToSummarize = PromptHelper.addHelperToPrompt(detailledImageContent, 2, 0);
 
-                    else
+                        var summarizedImageContent = GenericGeminiClient.GetTextPrompt(_geminiClient, imageContentToSummarize).Result;
+
+                        if (summarizedImageContent != null)
                         {
-                            return new BaseResponse<Resume>(ResultCodeEnum.Failed, null,"geminiresponse null");
+                            ResumesHelpers.processResumesResponse(resumeResult, summarizedImageContent);
                         }
+                    }
+                    else
+                    {
+                        return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "geminiresponse null");
+                    }
                 }
             }
-
-            var prompt2 = PromptHelper.addHelperToPrompt(main_content, 3, 0);
-
-            var geminiResponse2 = GenericGeminiClient.GetTextPrompt(_geminiClient, prompt2).Result;
-
-            if (geminiResponse2 != null)
+            if (ResumesHelpers.validateResumeObject(resumeResult, doc.Pages.Count))
             {
-                Resume resume = ResumesHelpers.processResumesResponse(geminiResponse2);
-
-                return new BaseResponse<Resume>(ResultCodeEnum.Success, resume, "Succesfully fetched Resume");
+                return new BaseResponse<Resume>(ResultCodeEnum.Success, resumeResult, "Succesfully fetched Resume");
             }
-
-
-            return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "no pages found");
-
-            /* var prompt = PromptHelper.addHelperToPrompt("", 2, 0); 
-
-             var geminiResponse = GenericGeminiClient.getImagePrompt(_geminiClient, prompt , pdfdecode).Result;
-            */
-
-
-        }       
-}
+            else
+            {
+                return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "no pages found");
+            }
+        }
+    }
 }

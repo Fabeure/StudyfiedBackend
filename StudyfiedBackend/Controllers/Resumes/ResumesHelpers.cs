@@ -1,4 +1,5 @@
 ﻿using DotnetGeminiSDK.Model.Response;
+using Spire.Pdf;
 using StudyfiedBackend.Models;
 
 
@@ -6,18 +7,35 @@ namespace StudyfiedBackend.Controllers.Resumes
 {
     public static class ResumesHelpers
     {
-        public static Resume processResumesResponse(GeminiMessageResponse response)
+        public static void processResumesResponse(Resume resume, GeminiMessageResponse summarizedPageResponse)
         {
-            string responseText = response.Candidates[0].Content.Parts[0].Text;
-            Resume resume = buildResumeCardObject(responseText);
-            return resume;
+            string summarizedPageText = summarizedPageResponse.Candidates[0].Content.Parts[0].Text;
+
+            buildResumeCardObject(resume, summarizedPageText);
         }
 
-        public static Resume buildResumeCardObject(string resumeContent)
+        public static void buildResumeCardObject(Resume resume, string resumeContent)
         {
-            Resume resume = new Resume(resumeContent,"topic");
+            resume.ResumeContents.Add(resumeContent);
+        }
 
-            return resume;
+        public static bool validateResumeObject(Resume resume, int numberOfPages)
+        {
+            return resume != null
+                && numberOfPages > 0
+                && resume.ResumeContents.Count == numberOfPages
+                && resume.ResumeContents.All(pageResume => pageResume != null && pageResume != "");
+        }
+
+        public static PdfDocument getPdfFromString64(string encodedPdf) {
+
+            MemoryStream ms = new MemoryStream(Convert.FromBase64String(encodedPdf));
+
+            PdfDocument doc = new PdfDocument();
+
+            doc.LoadFromStream(ms);
+
+            return doc;
         }
     }
 }

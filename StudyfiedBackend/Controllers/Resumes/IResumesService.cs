@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using StudyfiedBackend.BaseResponse;
+﻿using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.Models;
 
 namespace StudyfiedBackend.Controllers.Resumes

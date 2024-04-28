@@ -10,25 +10,24 @@ namespace StudyfiedBackend.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-            public string? Id { get; set; }
+        public string? Id { get; set; }
     
-            public string? userId { get; set; }
+        public string? UserId { get; set; }
 
-            public string? topic { get; set; }
+        public string? Topic { get; set; }
+        
+        public IList<string> ResumeContents { get; set; }
     
-            public string? resumecontent { get; set; }
-    
-            public Resume(string resume,string topic, string userId = "NA")
+        public Resume()
         {
-                this.resumecontent = resume;
-                this.topic = topic;
-                this.userId = userId;
-            }   
-    
-            public bool hasUser()
+            this.ResumeContents = new List<string>();
+            this.Topic = "";
+            this.UserId = "NA";
+        }   
+        public bool hasUser()
         {
-                return this.userId != "NA";
-            }   
+            return this.UserId != "NA";
+        }   
 
     }
 }

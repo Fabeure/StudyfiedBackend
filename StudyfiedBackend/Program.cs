@@ -21,7 +21,6 @@ BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.BsonType.Strin
 BsonSerializer.RegisterSerializer(new DateTimeSerializer(MongoDB.Bson.BsonType.String));
 BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(MongoDB.Bson.BsonType.String));
 
-
 var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
 {
     MongoDbSettings = new MongoDbSettings
@@ -53,7 +52,6 @@ builder.Services.ConfigureMongoDbIdentityUserOnly<ApplicationUser, Guid>(mongoDb
 
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
-
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,7 +70,6 @@ builder.Services.AddAuthentication(x =>
         ValidateLifetime = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("eyJhbGciOiJIUzI1NiJ9.ew0KICAic3ViIjogIjEyMzQ1Njc4OTAiLA0KICAibmFtZSI6ICJBbmlzaCBOYXRoIiwNCiAgImlhdCI6IDE1MTYyMzkwMjINCn0.EH_mTmtyJ-Heekz3O6FzVVeDxFt9-UT_5D4oom0tyc0")),
         ClockSkew = TimeSpan.Zero
-
     };
 });
 
@@ -82,8 +79,6 @@ builder.Services.AddScoped<IFlashCardsService, FlashCardsService>();
 builder.Services.AddScoped<IResumesService, ResumesService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddSingleton<IMongoContext, MongoContext>();
-
-
 
 builder.Services.AddGeminiClient(config =>
 {
@@ -96,7 +91,6 @@ builder.Services.AddCors(options =>
     .WithOrigins(origins)
     .AllowAnyMethod()
     .AllowCredentials()));
-
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
