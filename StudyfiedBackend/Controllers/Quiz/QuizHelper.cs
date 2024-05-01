@@ -90,6 +90,39 @@ namespace StudyfiedBackend.Controllers.Quize
                 "option and actual validity DO NOT FORMAT THE RESPONSE IN ANY OTHER WAY, " +
                 "DO NOT WRITE THE WORD OPTION OR VALIDITY FOR ME");
         }
+
+        public static bool isValidQuiz(Quiz quiz, int numberOfQuestion)
+        {
+            if (quiz == null)
+            {
+                return false;
+            }
+
+            bool isValidQuiz = true;
+
+            bool isValidNumberOfQuestions = quiz.questionAnswerPairs.Keys
+                .Select(question => question.question != null && question.question != "")
+                .Count() == numberOfQuestion;
+
+            foreach(var questionAnswerPair in quiz.questionAnswerPairs)
+            {
+                bool isValidQuestion = (questionAnswerPair.Key.question != null
+                    && questionAnswerPair.Key.question != "");
+
+                bool isValidAnswers = (questionAnswerPair.Value
+                    .All(answer => answer.answer != null
+                    && answer.answer != ""
+                    && (answer.status == true || answer.status == false)));
+
+                bool isValidPair = isValidQuestion && isValidAnswers;
+                if (!isValidPair)
+                {
+                    isValidQuiz = false;
+                }
+            }
+
+            return isValidQuiz;
+        }
     }
 
 }

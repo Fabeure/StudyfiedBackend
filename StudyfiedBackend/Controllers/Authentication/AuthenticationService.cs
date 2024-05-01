@@ -15,21 +15,15 @@ namespace StudyfiedBackend.Controllers.Authentication
             _userRepository = context.GetRepository<ApplicationUser>();
         }
 
-        public BaseResponse<ApplicationUser> AuthenticateTokenAndGetUser(string token)
+        public ApplicationUser AuthenticateTokenAndGetUser(string token)
         {
             var user = AuthenticationHelper.processToken(token, _userRepository);
             if (user == null)
             {
-                return new BaseResponse<ApplicationUser>(
-                    ResultCodeEnum.Unauthorized,
-                    null);
+                throw new Exception(message: "Invalid token, please try again");
             }
-            return new BaseResponse<ApplicationUser> (
-                ResultCodeEnum.Success,
-                user);
+            return user;
         }
-      
-
     }
 
 }

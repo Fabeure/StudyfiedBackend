@@ -7,6 +7,6 @@ namespace StudyfiedBackend.Controllers.Authentication
 {
     public interface IAuthenticationService
     {
-        public BaseResponse<ApplicationUser> AuthenticateTokenAndGetUser(string token);
+        public ApplicationUser AuthenticateTokenAndGetUser(string token);
     }
 }

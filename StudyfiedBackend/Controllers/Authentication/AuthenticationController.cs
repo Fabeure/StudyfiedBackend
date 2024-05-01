@@ -80,7 +80,6 @@ namespace StudyfiedBackend.Controllers.Authentication
         {
             try
             {
-
                 var user = await _userManager.FindByEmailAsync(request.Email);
                 if (user is null || user.Email is null)
                 {
@@ -127,8 +126,6 @@ namespace StudyfiedBackend.Controllers.Authentication
                 Console.WriteLine(ex.Message);
                 return new LoginResponse { Success = false, Message = ex.Message };
             }
-
-
         }
     }
 }

@@ -32,10 +32,15 @@ namespace StudyfiedBackend.Controllers.Quize
                 if (question != null)
                 {
                     List<Response> responses = QuizHelper.GenerateResponses(question, _geminiClient);
-                    quiz.quizQuestions.Add(question, responses);
+                    quiz.questionAnswerPairs.Add(question, responses);
                 }
             }
-            return new BaseResponse<Quiz>(ResultCodeEnum.Success, quiz, "Succesfull");
+
+            if (!QuizHelper.isValidQuiz(quiz: quiz, numberOfQuestion: numberOfQuestion))
+            {
+                return getQuiz(topic: topic, difficulty: difficulty, numberOfQuestion: numberOfQuestion);
+            }
+            return new BaseResponse<Quiz>(ResultCodeEnum.Success, quiz, "Succesfully generated quiz");
         }
 
         public PrimitiveBaseResponse<bool> persistQuiz(Quiz quizWithUserId)
