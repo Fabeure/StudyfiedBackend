@@ -15,6 +15,7 @@ namespace StudyfiedBackend.Controllers.Quize
             _geminiClient = geminiClient;
             _quizRepository = context.GetRepository<Quiz>();
         }
+
         public BaseResponse<Quiz> getQuiz(string topic, string difficulty="medium", int numberOfQuestion=5)
         {
             if (topic == null || topic == "" )  
@@ -36,6 +37,7 @@ namespace StudyfiedBackend.Controllers.Quize
             }
             return new BaseResponse<Quiz>(ResultCodeEnum.Success, quiz, "Succesfull");
         }
+
         public PrimitiveBaseResponse<bool> persistQuiz(Quiz quizWithUserId)
         {
             if (quizWithUserId == null)
@@ -44,8 +46,9 @@ namespace StudyfiedBackend.Controllers.Quize
             }
 
             _quizRepository.CreateAsync(quizWithUserId);
-            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, "Succesfully persisted Quiz");
+            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, "Succesfully added Quiz");
         }
+
         public BaseResponse<Quiz> getExistingQuiz(string id)
         {
             if (id == null || id == "")
@@ -61,6 +64,5 @@ namespace StudyfiedBackend.Controllers.Quize
 
             return new BaseResponse<Quiz>(ResultCodeEnum.Success, quiz, "Succesfully fetched Quiz");
         }
-
     }
 }

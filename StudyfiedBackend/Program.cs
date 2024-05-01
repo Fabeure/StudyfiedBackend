@@ -78,7 +78,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped<IFlashCardsService, FlashCardsService>();
 builder.Services.AddScoped<IResumesService, ResumesService>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddSingleton<IMongoContext, MongoContext>();
 

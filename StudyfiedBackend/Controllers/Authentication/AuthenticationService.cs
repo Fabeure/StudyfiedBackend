@@ -5,12 +5,12 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace StudyfiedBackend.Controllers.Authentication
 {
-    public class UserService : IUserService
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly IMongoRepository<ApplicationUser> _userRepository;
        
 
-        public UserService(IMongoContext context)
+        public AuthenticationService(IMongoContext context)
         {
             _userRepository = context.GetRepository<ApplicationUser>();
         }

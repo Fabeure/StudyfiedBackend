@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace StudyfiedBackend.Controllers.Authentication
 {
-    public interface IUserService
+    public interface IAuthenticationService
     {
         public BaseResponse<ApplicationUser> AuthenticateTokenAndGetUser(string token);
     }

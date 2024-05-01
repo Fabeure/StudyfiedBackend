@@ -64,7 +64,7 @@ namespace StudyfiedBackend.Controllers.Resumes
                     }
                     else
                     {
-                        return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "geminiresponse null");
+                        return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "gemini response is null");
                     }
                 }
             }
