@@ -116,3 +116,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// lweh ? manedrouch 
+// to specifically target this class when building the fake client in unit tests
+public partial class Program { }

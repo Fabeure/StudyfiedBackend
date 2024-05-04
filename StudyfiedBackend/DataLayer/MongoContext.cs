@@ -16,6 +16,12 @@ namespace StudyfiedBackend.DataLayer
             _database = _client.GetDatabase(configuration.GetValue<string>("MongoDB:DatabaseName"));
         }
 
+        public MongoContext(MongoClient client, IMongoDatabase database)
+        {
+            _client = client;
+            _database = database;
+        }
+
         public IMongoRepository<T> GetRepository<T>() where T : class
         {
             var collectionName = typeof(T).GetCustomAttributes<CollectionNameAttribute>()
