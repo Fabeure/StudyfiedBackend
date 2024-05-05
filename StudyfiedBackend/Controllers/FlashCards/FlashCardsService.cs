@@ -10,13 +10,11 @@ namespace StudyfiedBackend.Controllers.FlashCards
     public class FlashCardsService : IFlashCardsService
     {
         private readonly IGeminiClient _geminiClient;
-        private readonly IMongoRepository<FlashCard> _flashCardRepository;
 
-        public FlashCardsService(IGeminiClient geminiClient, IMongoContext context) {
+        public FlashCardsService(IGeminiClient geminiClient) {
             _geminiClient = geminiClient;
-            _flashCardRepository = context.GetRepository<FlashCard>();
         }
-        public BaseResponse<FlashCard> getFlashCard(string topic)
+        public async Task<BaseResponse<FlashCard>> getFlashCardResponse(string topic)
         {
             if (topic == null || topic == "")
             {
@@ -26,7 +24,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
             topic = PromptHelper.addHelperToPrompt(topic, 0, 0);
             topic = PromptHelper.addHelperToPrompt(topic, 1, 1);
 
-            var geminiResponse = GenericGeminiClient.GetTextPrompt(_geminiClient, topic).Result;
+            var geminiResponse = await GenericGeminiClient.GetTextPrompt(_geminiClient, topic);
 
             if (geminiResponse != null)
             {
