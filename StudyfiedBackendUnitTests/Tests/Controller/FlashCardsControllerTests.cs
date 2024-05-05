@@ -12,12 +12,12 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
     [Collection("Database collection")]
     public class FlashCardsControllerTests
     {
-        private readonly FakeClientWithInMemoryDataLayer _fakeClientWithInMemoryDataLayer;
-        private readonly FlashCardServiceInterface _serviceInterface;
+        private readonly FakeClientWithInMemoryDataLayer fakeClientWithInMemoryDataLayer;
+        private readonly FlashCardServiceInterface service;
         public FlashCardsControllerTests(FakeClientWithInMemoryDataLayer fakeClientWithInMemoryDataLayer)
         {
-            _fakeClientWithInMemoryDataLayer = fakeClientWithInMemoryDataLayer;
-            _serviceInterface = new FlashCardServiceInterface(client: _fakeClientWithInMemoryDataLayer.FakeHttpClient);
+            this.fakeClientWithInMemoryDataLayer = fakeClientWithInMemoryDataLayer;
+            service = new FlashCardServiceInterface(client: this.fakeClientWithInMemoryDataLayer.FakeHttpClient);
         }
 
         [Fact]
@@ -34,8 +34,8 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
             FlashCard flashCard = new FlashCard(items: testData, userId:"salem ena user");
 
             //Act
-            _serviceInterface.persistFlashCard(flashCardWithUserId: flashCard);
-            List<FlashCard> flashcards = _serviceInterface.getAllFlashCards();
+            service.persistFlashCard(flashCardWithUserId: flashCard);
+            List<FlashCard> flashcards = service.getAllFlashCards();
 
             //Assert
             flashcards.Should().NotBeEmpty();
