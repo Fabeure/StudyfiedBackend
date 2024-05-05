@@ -3,7 +3,7 @@ using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.Models;
 
 namespace StudyfiedBackend.Controllers.FlashCards
-{   
+{
     [Route("api/[controller]")]
     [ApiController]
     public class FlashCardsController : ControllerBase
@@ -19,6 +19,12 @@ namespace StudyfiedBackend.Controllers.FlashCards
         public BaseResponse<FlashCard> get([FromBody] string topic)
         {
             return flashCardsService.getFlashCard(topic);
+        }
+
+        [HttpPost("persistFlashCard")]
+        public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId)
+        {
+            return flashCardsService.persistFlashCard(flashCardWithUserId);
         }
 
         [HttpGet("getExistingFlashCard")]
