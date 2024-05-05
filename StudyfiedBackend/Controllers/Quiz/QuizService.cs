@@ -2,6 +2,7 @@
 using StudyfiedBackend.Models;
 using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.DataLayer;
+using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 
 namespace StudyfiedBackend.Controllers.Quize
 {

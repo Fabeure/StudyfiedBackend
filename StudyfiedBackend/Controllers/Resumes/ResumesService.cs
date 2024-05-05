@@ -7,6 +7,7 @@ using Spire.Pdf;
 using Spire.Pdf.Graphics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 
 
 namespace StudyfiedBackend.Controllers.Resumes

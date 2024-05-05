@@ -3,6 +3,7 @@ using StudyfiedBackend.Models;
 using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.Controllers.Gemini;
 using StudyfiedBackend.DataLayer;
+using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 
 namespace StudyfiedBackend.Controllers.FlashCards
 {
@@ -70,5 +71,10 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Failed, null, "failed to fetch flashCards");
         }
 
+        public BaseResponse<List<FlashCard>> getAllFlashCards()
+        {
+            List<FlashCard> flashCards = _flashCardRepository.GetAllAsync().Result.ToList();
+            return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Success, flashCards, "flashcards fetched!");
+        }
     }
 }

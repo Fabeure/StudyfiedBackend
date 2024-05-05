@@ -2,6 +2,8 @@
 using FluentAssertions;
 using StudyfiedBackend.Controllers.FlashCards;
 using StudyfiedBackend.Models;
+using StudyfiedBackendUnitTests.Helpers.ServiceInterfaces;
+using StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards;
 using StudyfiedBackendUnitTests.Mock.DataLayer;
 using static System.Net.WebRequestMethods;
 
@@ -10,40 +12,36 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
     [Collection("Database collection")]
     public class FlashCardsControllerTests
     {
-        private readonly IFlashCardsService _flashCardsService;
         private readonly FakeClientWithInMemoryDataLayer _fakeClientWithInMemoryDataLayer;
-
+        private readonly FlashCardServiceInterface _serviceInterface;
         public FlashCardsControllerTests(FakeClientWithInMemoryDataLayer fakeClientWithInMemoryDataLayer)
         {
-            _flashCardsService = A.Fake<IFlashCardsService>();
             _fakeClientWithInMemoryDataLayer = fakeClientWithInMemoryDataLayer;
+            _serviceInterface = new FlashCardServiceInterface(client: _fakeClientWithInMemoryDataLayer.FakeHttpClient);
         }
 
         [Fact]
-        public async void PersistFlashCardTest()
+        public void InsertAndGetAllFlashCardsTest()
         {
             //Arrange
-            var client = _fakeClientWithInMemoryDataLayer.FakeHttpClient;
-            var db = _fakeClientWithInMemoryDataLayer.Database;
-
-            var flashCardsCollection = db.GetCollection<FlashCard>("FlashCards");
 
             Dictionary<string, string> testData = new Dictionary<string, string>()
             {
                 { "question1", "answer1" },
-                { "question2", "answer2"}
+                { "question2", "answer2" },
             };
 
-            FlashCard flashCard = new FlashCard(items: testData);
-
-            flashCardsCollection.InsertOne(flashCard);
-
-            var test = client.GetAsync("/api/FlashCards/getExistingFlashCard?id=100").Result;
-
+            FlashCard flashCard = new FlashCard(items: testData, userId:"salem ena user");
 
             //Act
+            _serviceInterface.persistFlashCard(flashCardWithUserId: flashCard);
+            List<FlashCard> flashcards = _serviceInterface.getAllFlashCards();
 
             //Assert
+            flashcards.Should().NotBeEmpty();
+            flashcards.Count.Should().Be(1);
+            flashcards.First().items.Should().NotBeNull();
+            flashcards.First().items.Should().Equal(testData);
         }
     }
 }

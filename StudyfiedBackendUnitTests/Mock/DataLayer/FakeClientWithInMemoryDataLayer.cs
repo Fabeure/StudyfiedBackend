@@ -34,7 +34,7 @@ namespace StudyfiedBackendUnitTests.Mock.DataLayer
                     {
                         // Replace existing MongoDB context
                         services.RemoveAll<IMongoContext>();
-                        services.AddSingleton((_) => fakeContext);
+                        services.AddSingleton<IMongoContext>((_) => fakeContext);
                     });
                 });
             FakeHttpClient = _appFactory.CreateClient();

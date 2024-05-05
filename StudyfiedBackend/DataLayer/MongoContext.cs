@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using MongoDbGenericRepository.Attributes;
+using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 using System.Reflection;
 
 namespace StudyfiedBackend.DataLayer
