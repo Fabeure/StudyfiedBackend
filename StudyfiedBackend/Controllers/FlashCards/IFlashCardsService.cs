@@ -5,6 +5,11 @@ namespace StudyfiedBackend.Controllers.FlashCards
 {
     public interface IFlashCardsService
     {
-        public Task<BaseResponse<FlashCard>> getFlashCardResponse(string topic);
+        public BaseResponse<FlashCard> getFlashCard(string topic);
+        public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId);
+        public BaseResponse<FlashCard> getExistingFlashCard(string id);
+        public BaseResponse<List<FlashCard>> getBatchExistingFlashCard(string[] id);
+
+        public BaseResponse<List<FlashCard>> getAllFlashCards();
     }
 }

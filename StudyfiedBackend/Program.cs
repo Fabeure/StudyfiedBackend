@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using StudyfiedBackend.Controllers.Authentication;
 using StudyfiedBackend.Controllers.FlashCards;
+using StudyfiedBackend.Controllers.Resumes;
+using StudyfiedBackend.Controllers.Quize;
+using StudyfiedBackend.DataLayer;
 using StudyfiedBackend.Models;
-using StudyfiedBackend.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +21,6 @@ string[] origins = { "https://fabeure.github.io", "https://localhost:5173" };
 BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.BsonType.String));
 BsonSerializer.RegisterSerializer(new DateTimeSerializer(MongoDB.Bson.BsonType.String));
 BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(MongoDB.Bson.BsonType.String));
-
 
 var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
 {
@@ -44,14 +46,12 @@ var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
 
 };
 
-
 builder.Services.ConfigureMongoDbIdentityUserOnly<ApplicationUser, Guid>(mongoDbIdentityConfig)
     .AddUserManager<UserManager<ApplicationUser>>()
     .AddSignInManager<SignInManager<ApplicationUser>>()
     .AddDefaultTokenProviders();
 
-
-builder.Services.AddScoped<IFlashCardsService, FlashCardsService>();
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
 builder.Services.AddAuthentication(x =>
 {
@@ -71,17 +71,16 @@ builder.Services.AddAuthentication(x =>
         ValidateLifetime = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("eyJhbGciOiJIUzI1NiJ9.ew0KICAic3ViIjogIjEyMzQ1Njc4OTAiLA0KICAibmFtZSI6ICJBbmlzaCBOYXRoIiwNCiAgImlhdCI6IDE1MTYyMzkwMjINCn0.EH_mTmtyJ-Heekz3O6FzVVeDxFt9-UT_5D4oom0tyc0")),
         ClockSkew = TimeSpan.Zero
-
     };
 });
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Add depencies here when adding a new service
 
-builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
-builder.Services.AddSingleton<MongoDBService>();
+builder.Services.AddScoped<IFlashCardsService, FlashCardsService>();
+builder.Services.AddScoped<IResumesService, ResumesService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
+builder.Services.AddSingleton<IMongoContext, MongoContext>();
 
 builder.Services.AddGeminiClient(config =>
 {
@@ -94,6 +93,10 @@ builder.Services.AddCors(options =>
     .WithOrigins(origins)
     .AllowAnyMethod()
     .AllowCredentials()));
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -113,3 +116,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// lweh ? manedrouch 
+// to specifically target this class when building the fake client in unit tests
+public partial class Program { }

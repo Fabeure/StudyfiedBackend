@@ -80,7 +80,6 @@ namespace StudyfiedBackend.Controllers
         {
             try
             {
-
                 var user = await _userManager.FindByEmailAsync(request.Email);
                 if (user is null || user.Email is null) {
                     return new LoginResponse { Message = "Invalid email/password", Success = false };
@@ -126,8 +125,6 @@ namespace StudyfiedBackend.Controllers
                 Console.WriteLine(ex.Message);
                 return new LoginResponse { Success = false, Message = ex.Message };
             }
-
-
         }
     }
 }
