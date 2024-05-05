@@ -10,11 +10,14 @@ namespace StudyfiedBackend.Controllers.FlashCards
     public class FlashCardsService : IFlashCardsService
     {
         private readonly IGeminiClient _geminiClient;
+        private readonly IMongoRepository<FlashCard> _flashCardRepository;
 
-        public FlashCardsService(IGeminiClient geminiClient) {
+        public FlashCardsService(IGeminiClient geminiClient, IMongoContext context)
+        {
             _geminiClient = geminiClient;
+            _flashCardRepository = context.GetRepository<FlashCard>();
         }
-        public async Task<BaseResponse<FlashCard>> getFlashCardResponse(string topic)
+        public BaseResponse<FlashCard> getFlashCard(string topic)
         {
             if (topic == null || topic == "")
             {
@@ -24,12 +27,13 @@ namespace StudyfiedBackend.Controllers.FlashCards
             topic = PromptHelper.addHelperToPrompt(topic, 0, 0);
             topic = PromptHelper.addHelperToPrompt(topic, 1, 1);
 
-            var geminiResponse = await GenericGeminiClient.GetTextPrompt(_geminiClient, topic);
+            var geminiResponse = GenericGeminiClient.GetTextPrompt(_geminiClient, topic).Result;
 
             if (geminiResponse != null)
             {
                 FlashCard flashCard = FlashCardsHelpers.processFlashCardResponse(geminiResponse);
-                if (!FlashCardsHelpers.validateFlashCardResult(flashCard)) {
+                if (!FlashCardsHelpers.validateFlashCardResult(flashCard))
+                {
                     return getFlashCard(topic);
                 }
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Success, flashCard, "Succesfully fetched FlashCards");
@@ -56,7 +60,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
             {
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Success, flashCard, $"Succesfully fetched flash card {flashCard.Id}");
             }
-            return new BaseResponse<FlashCard> (ResultCodeEnum.Failed, null, $"No flash card with id {id} found");
+            return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null, $"No flash card with id {id} found");
         }
 
         public BaseResponse<List<FlashCard>> getBatchExistingFlashCard(string[] id)
