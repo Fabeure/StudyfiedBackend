@@ -71,7 +71,7 @@ namespace StudyfiedBackend.Controllers.Quize
                 " the format is that questions should be seperated by a ';' between every single one of them. " +
                 "Please do not include any return to lines, and give me the question followed by \";\" ,and only \";\" without" +
                 "any return to lines DO NOT INCLUDE ANY RETURN TO LINES '\n'" +
-                "DO NOT FORMAT THE RESPONSE IN ANY OTHER WAY, DO NOT WRITE THE WORD QUESTION FOR ME";
+                "DO NOT FORMAT THE RESPONSE IN ANY OTHER WAY, DO NOT WRITE THE WORD QUESTION FOR ME");
         }
 
         private static string BuildResponsesPrompt(string question)

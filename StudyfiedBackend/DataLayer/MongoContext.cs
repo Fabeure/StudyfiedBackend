@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using MongoDbGenericRepository.Attributes;
+using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 using System.Reflection;
 
 namespace StudyfiedBackend.DataLayer
@@ -14,6 +15,12 @@ namespace StudyfiedBackend.DataLayer
             var connectionString = configuration.GetValue<string>("MongoDB:ConnectionURI");
             _client = new MongoClient(connectionString);
             _database = _client.GetDatabase(configuration.GetValue<string>("MongoDB:DatabaseName"));
+        }
+
+        public MongoContext(MongoClient client, IMongoDatabase database)
+        {
+            _client = client;
+            _database = database;
         }
 
         public IMongoRepository<T> GetRepository<T>() where T : class

@@ -4,8 +4,8 @@ using StudyfiedBackend.Models;
 using System.Collections.Concurrent;
 using System.IdentityModel.Tokens.Jwt;
 using System.Xml.Schema;
-using StudyfiedBackend.DataLayer;
 using System.Diagnostics.Eventing.Reader;
+using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 
 namespace StudyfiedBackend.Controllers.Authentication
 {
