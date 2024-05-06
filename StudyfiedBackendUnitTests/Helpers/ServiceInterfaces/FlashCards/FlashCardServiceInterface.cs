@@ -24,6 +24,7 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
         {
             var url = $"{URLEnums.FLASHCARDS}/getAllFlashCards?";
             var response = _httpClient.GetAsync(url).Result;
+
             BaseResponse<List<FlashCard>>? deserializedResponse = response.Content.ReadFromJsonAsync<BaseResponse<List<FlashCard>>>().Result;
 
             return deserializedResponse.ResultItem;
