@@ -1,4 +1,6 @@
-﻿namespace StudyfiedBackend.DataLayer
+﻿using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
+
+namespace StudyfiedBackend.DataLayer
 {
     public interface IMongoContext
     {

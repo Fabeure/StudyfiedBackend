@@ -7,6 +7,7 @@ using Spire.Pdf;
 using Spire.Pdf.Graphics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 
 
 namespace StudyfiedBackend.Controllers.Resumes
@@ -36,6 +37,11 @@ namespace StudyfiedBackend.Controllers.Resumes
 
             Resume resumeResult = new Resume();
 
+            if (doc.Pages.Count == 0)
+            {
+                return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "no pages found");
+            }
+
             for (int i = 0; i < doc.Pages.Count; i++)
             { 
                 Image image = doc.SaveAsImage(i, PdfImageType.Bitmap, 500, 500);
@@ -64,7 +70,7 @@ namespace StudyfiedBackend.Controllers.Resumes
                     }
                     else
                     {
-                        return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "geminiresponse null");
+                        return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "gemini response is null");
                     }
                 }
             }
@@ -74,7 +80,7 @@ namespace StudyfiedBackend.Controllers.Resumes
             }
             else
             {
-                return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "no pages found");
+                return getResume(encodedPdf: encodedPdf);
             }
         }
     }

@@ -1,35 +1,30 @@
 ﻿using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.DataLayer;
+using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 using StudyfiedBackend.Models;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace StudyfiedBackend.Controllers.Authentication
 {
-    public class UserService : IUserService
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly IMongoRepository<ApplicationUser> _userRepository;
        
 
-        public UserService(IMongoContext context)
+        public AuthenticationService(IMongoContext context)
         {
             _userRepository = context.GetRepository<ApplicationUser>();
         }
 
-        public BaseResponse<ApplicationUser> AuthenticateTokenAndGetUser(string token)
+        public ApplicationUser AuthenticateTokenAndGetUser(string token)
         {
             var user = AuthenticationHelper.processToken(token, _userRepository);
             if (user == null)
             {
-                return new BaseResponse<ApplicationUser>(
-                    ResultCodeEnum.Unauthorized,
-                    null);
+                throw new Exception(message: "Invalid token, please try again");
             }
-            return new BaseResponse<ApplicationUser> (
-                ResultCodeEnum.Success,
-                user);
+            return user;
         }
-      
-
     }
 
 }

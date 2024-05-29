@@ -16,7 +16,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string[] origins = { "https://fabeure.github.io", "https://localhost:5173" };
+string[] origins = { "https://fabeure.github.io", "https://localhost:5173", "https://saber-azouzi.github.io" };
 // Add services to the container.
 BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.BsonType.String));
 BsonSerializer.RegisterSerializer(new DateTimeSerializer(MongoDB.Bson.BsonType.String));
@@ -78,7 +78,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped<IFlashCardsService, FlashCardsService>();
 builder.Services.AddScoped<IResumesService, ResumesService>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddSingleton<IMongoContext, MongoContext>();
 
@@ -116,3 +116,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// lweh ? manedrouch 
+// to specifically target this class when building the fake client in unit tests
+public partial class Program { }

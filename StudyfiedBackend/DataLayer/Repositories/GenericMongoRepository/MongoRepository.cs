@@ -2,7 +2,7 @@
 using MongoDB.Driver;
 using MongoDbGenericRepository.Models;
 
-namespace StudyfiedBackend.DataLayer
+namespace StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository
 {
     public class MongoRepository<T> : IMongoRepository<T> where T : class
     {

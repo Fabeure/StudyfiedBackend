@@ -33,5 +33,11 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return flashCardsService.getExistingFlashCard(id);
         }
 
+        [HttpGet("getAllFlashCards")]
+        public BaseResponse<List<FlashCard>> getAllFlashCards()
+        {
+            return flashCardsService.getAllFlashCards();
+        }
+
     }
 }
