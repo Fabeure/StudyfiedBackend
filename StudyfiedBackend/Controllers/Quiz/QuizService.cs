@@ -15,27 +15,35 @@ namespace StudyfiedBackend.Controllers.Quize
             _geminiClient = geminiClient;
             _quizRepository = context.GetRepository<Quiz>();
         }
-        public BaseResponse<Quiz> getQuiz(string topic, string difficulty="medium", int numberOfQuestion=5)
+
+        public BaseResponse<Quiz> getQuiz(string topic, string difficulty = "medium", int numberOfQuestion = 5)
         {
-            if (topic == null || topic == "" )  
+            if (topic == null || topic == "")
             {
                 return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null);
             }
 
             Quiz quiz = new Quiz(topic, difficulty, numberOfQuestion);
 
-            List<Question> questions = QuizHelper.GenerateQuestion(topic, difficulty,numberOfQuestion,_geminiClient);
+            List<Question> questions = QuizHelper.GenerateQuestion(topic, difficulty, numberOfQuestion, _geminiClient);
 
             foreach (Question question in questions)
             {
                 if (question != null)
                 {
                     List<Response> responses = QuizHelper.GenerateResponses(question, _geminiClient);
-                    quiz.quizQuestions.Add(question, responses);
+                    quiz.questionAnswerPairs.Add(question.question, responses);
                 }
             }
-            return new BaseResponse<Quiz>(ResultCodeEnum.Success, quiz, "Succesfull");
+
+            if (!QuizHelper.isValidQuiz(quiz: quiz, numberOfQuestion: numberOfQuestion))
+            {
+                return getQuiz(topic: topic, difficulty: difficulty, numberOfQuestion: numberOfQuestion);
+            }
+
+            return new BaseResponse<Quiz>(ResultCodeEnum.Success, quiz, "Succesfully generated quiz");
         }
+
         public PrimitiveBaseResponse<bool> persistQuiz(Quiz quizWithUserId)
         {
             if (quizWithUserId == null)
@@ -44,8 +52,9 @@ namespace StudyfiedBackend.Controllers.Quize
             }
 
             _quizRepository.CreateAsync(quizWithUserId);
-            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, "Succesfully persisted Quiz");
+            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, "Succesfully added Quiz");
         }
+
         public BaseResponse<Quiz> getExistingQuiz(string id)
         {
             if (id == null || id == "")
@@ -61,6 +70,5 @@ namespace StudyfiedBackend.Controllers.Quize
 
             return new BaseResponse<Quiz>(ResultCodeEnum.Success, quiz, "Succesfully fetched Quiz");
         }
-
     }
 }
