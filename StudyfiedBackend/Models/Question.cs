@@ -2,7 +2,7 @@
 {
     public class Question
     {
-        public string question { get; set; }
+        public string content { get; set; }
         //public int score { get; set; }
         /*public Question(string question, int score)
         {
@@ -10,9 +10,9 @@
             this.score = score;
         }*/
 
-        public Question(string question)
+        public Question(string content)
         {
-            this.question = question;
+            this.content = content;
         }
     }
 }

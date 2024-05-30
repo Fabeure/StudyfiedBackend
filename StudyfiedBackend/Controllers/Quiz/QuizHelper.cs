@@ -29,11 +29,11 @@ namespace StudyfiedBackend.Controllers.Quize
             }
             return questions;
         }
-        public static List<Response> GenerateResponses(Question question, IGeminiClient geminiClient)
+        public static List<Answer> GenerateResponses(Question question, IGeminiClient geminiClient)
         {
-            List<Response> responses = new List<Response>();
+            List<Answer> responses = new List<Answer>();
 
-            string responsesPrompt = BuildResponsesPrompt(question: question.question);
+            string responsesPrompt = BuildResponsesPrompt(question: question.content);
 
             var geminiResponse = GenericGeminiClient.GetTextPrompt(geminiClient, responsesPrompt).Result;
 
@@ -48,11 +48,11 @@ namespace StudyfiedBackend.Controllers.Quize
                         string validity = parts[1].ToLower().Trim();
                         if (validity == "true")
                         {
-                            responses.Add(new Response(parts[0], true));
+                            responses.Add(new Answer(parts[0], true));
                         }
                         else if (validity == "false")
                         {
-                            responses.Add(new Response(parts[0], false));
+                            responses.Add(new Answer(parts[0], false));
                         }
                     }
                 }
@@ -92,34 +92,17 @@ namespace StudyfiedBackend.Controllers.Quize
                 "DO NOT WRITE THE WORD OPTION OR VALIDITY FOR ME");
         }
 
-        public static bool isValidQuiz(Quiz quiz, int numberOfQuestion)
+        public static bool isValidQuestions(List<Question> questions, int numberOfQuestions)
         {
-            if (quiz == null || numberOfQuestion == 0)
-            {
-                return false;
-            }
+            bool isValidNumberOfQuestions = questions.Count() == numberOfQuestions;
+            bool isValidQuestions = questions.All(question => !string.IsNullOrEmpty(question.content));
 
-            bool isValidNumberOfQuestions = quiz.questionAnswerPairs.Keys.
-                Select(question => !string.IsNullOrEmpty(question)).Count() == numberOfQuestion;
+            return isValidNumberOfQuestions && isValidQuestions;
+        }
 
-            if (!isValidNumberOfQuestions)
-            {
-                return false;
-            }
-
-            bool isValidQuiz = quiz.questionAnswerPairs
-                .TakeWhile(questionAnswerPair => !string.IsNullOrEmpty(questionAnswerPair.Key))
-                .All(questionAnswerPair =>
-                {
-                    bool isValidQuestion = !string.IsNullOrEmpty(questionAnswerPair.Key);
-
-                    bool isValidAnswers = questionAnswerPair.Value.All(answer =>
-                        !string.IsNullOrEmpty(answer.answer) && (answer.status == true || answer.status == false));
-
-                    return isValidQuestion && isValidAnswers;
-                });
-
-            return isValidQuiz;
+        public static bool isValidAnswers(List<Answer> answers)
+        {
+            return answers.All(answer => !string.IsNullOrEmpty(answer.content) && (answer.status == true || answer.status == false));
         }
     }
 
