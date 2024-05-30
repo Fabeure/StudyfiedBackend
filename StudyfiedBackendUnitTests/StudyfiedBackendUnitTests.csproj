@@ -34,8 +34,4 @@
     <ProjectReference Include="..\StudyfiedBackend\StudyfiedBackend.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Tests\Controller\User\" />
-  </ItemGroup>
-
 </Project>

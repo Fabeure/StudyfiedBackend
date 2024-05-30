@@ -1,13 +1,12 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
-using StudyfiedBackend.Controllers.FlashCards;
 using StudyfiedBackend.Models;
 using StudyfiedBackendUnitTests.Helpers.ServiceInterfaces;
 using StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards;
 using StudyfiedBackendUnitTests.Mock.DataLayer;
 using static System.Net.WebRequestMethods;
 
-namespace StudyfiedBackendUnitTests.Tests.Controller.FlashCard
+namespace StudyfiedBackendUnitTests.Tests.Controller
 {
     [Collection("Database collection")]
     public class FlashCardsControllerTests
