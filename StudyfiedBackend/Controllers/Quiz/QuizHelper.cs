@@ -101,28 +101,16 @@ namespace StudyfiedBackend.Controllers.Quize
 
             bool isValidQuiz = true;
 
-            int numOfQuizQuestions = 0;
 
-            foreach (string question in quiz.questionAnswerPairs.Keys)
-            {
-                if (question == null)
-                {
-                    quiz.questionAnswerPairs.Remove(question);
-                    break;
-                }
-                if (question.Length < 5)
-                {
-                    quiz.questionAnswerPairs.Remove(question);
-                    break;
-                }
-                numOfQuizQuestions++;
-
-            }
-
-            bool isValidNumberOfQuestions = numOfQuizQuestions == numberOfQuestion;
+            bool isValidNumberOfQuestions = quiz.questionAnswerPairs.Keys.
+                Select(question => question != null && question != "").Count() == numberOfQuestion;
 
             foreach (var questionAnswerPair in quiz.questionAnswerPairs)
             {
+                if (questionAnswerPair.Key == null || questionAnswerPair.Key == "")
+                {
+                    break;
+                }
                 bool isValidQuestion = (questionAnswerPair.Key != null
                     && questionAnswerPair.Key != "");
 
