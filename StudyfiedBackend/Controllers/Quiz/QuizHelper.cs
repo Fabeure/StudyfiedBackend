@@ -94,37 +94,30 @@ namespace StudyfiedBackend.Controllers.Quize
 
         public static bool isValidQuiz(Quiz quiz, int numberOfQuestion)
         {
-            if (quiz == null)
+            if (quiz == null || numberOfQuestion == 0)
             {
                 return false;
             }
 
-            bool isValidQuiz = true;
-
-
             bool isValidNumberOfQuestions = quiz.questionAnswerPairs.Keys.
-                Select(question => question != null && question != "").Count() == numberOfQuestion;
+                Select(question => !string.IsNullOrEmpty(question)).Count() == numberOfQuestion;
 
-            foreach (var questionAnswerPair in quiz.questionAnswerPairs)
+            if (!isValidNumberOfQuestions)
             {
-                if (questionAnswerPair.Key == null || questionAnswerPair.Key == "")
-                {
-                    break;
-                }
-                bool isValidQuestion = (questionAnswerPair.Key != null
-                    && questionAnswerPair.Key != "");
-
-                bool isValidAnswers = (questionAnswerPair.Value
-                    .All(answer => answer.answer != null
-                    && answer.answer != ""
-                    && (answer.status == true || answer.status == false)));
-
-                bool isValidPair = isValidQuestion && isValidAnswers;
-                if (!isValidPair)
-                {
-                    isValidQuiz = false;
-                }
+                return false;
             }
+
+            bool isValidQuiz = quiz.questionAnswerPairs
+                .TakeWhile(questionAnswerPair => !string.IsNullOrEmpty(questionAnswerPair.Key))
+                .All(questionAnswerPair =>
+                {
+                    bool isValidQuestion = !string.IsNullOrEmpty(questionAnswerPair.Key);
+
+                    bool isValidAnswers = questionAnswerPair.Value.All(answer =>
+                        !string.IsNullOrEmpty(answer.answer) && (answer.status == true || answer.status == false));
+
+                    return isValidQuestion && isValidAnswers;
+                });
 
             return isValidQuiz;
         }
