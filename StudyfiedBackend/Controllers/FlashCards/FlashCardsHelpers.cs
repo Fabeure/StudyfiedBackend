@@ -5,6 +5,11 @@ namespace StudyfiedBackend.Controllers.FlashCards
 {
     public static class FlashCardsHelpers
     {
+
+        public static string insertNumberOfFlashCardsToTopic(string topic, int numberOfFlashcards)
+        {
+            return numberOfFlashcards + " question answer pairs about " + topic;
+        }
         public static FlashCard processFlashCardResponse(GeminiMessageResponse response)
         {
             string responseText = response.Candidates[0].Content.Parts[0].Text;
@@ -48,9 +53,9 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return flashCard;
         }
 
-        public static bool validateFlashCardResult(FlashCard flashCard)
+        public static bool validateFlashCardResult(FlashCard flashCard, int numberOfFlashCards)
         {
-            return (flashCard.items.Count >= 5
+            return (flashCard.items.Count() == numberOfFlashCards
                 && flashCard.items.All(pair => pair.Value != "" && pair.Key != ""));
         }
     }
