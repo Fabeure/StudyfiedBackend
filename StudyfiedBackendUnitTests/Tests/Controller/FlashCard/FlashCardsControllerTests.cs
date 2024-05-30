@@ -7,7 +7,7 @@ using StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards;
 using StudyfiedBackendUnitTests.Mock.DataLayer;
 using static System.Net.WebRequestMethods;
 
-namespace StudyfiedBackendUnitTests.Tests.Controller
+namespace StudyfiedBackendUnitTests.Tests.Controller.FlashCard
 {
     [Collection("Database collection")]
     public class FlashCardsControllerTests
@@ -33,7 +33,7 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
                 { "question2", "answer2" },
             };
 
-            FlashCard flashCard = new FlashCard(items: testData, userId:"salem ena user");
+            FlashCard flashCard = new FlashCard(items: testData, userId: "salem ena user");
 
             //Act
             service.persistFlashCard(flashCardWithUserId: flashCard);
