@@ -16,9 +16,9 @@ namespace StudyfiedBackend.Controllers.FlashCards
         }
 
         [HttpPost("getFlashCard")]
-        public BaseResponse<FlashCard> get([FromBody] string topic)
+        public BaseResponse<FlashCard> get(string topic, int numberOfFlashCards)
         {
-            return flashCardsService.getFlashCard(topic);
+            return flashCardsService.getFlashCard(topic, numberOfFlashCards);
         }
 
         [HttpPost("persistFlashCard")]

@@ -5,7 +5,7 @@
 
         private static string[] helpers =
         {
-            "i want you to generate me 5 question answer pairs. Make sure its exactly 5 pairs. You response should be a plain string, and only follow the formatting rules i will give you. Here is the topic : ",
+            "i want you to generate me some question answer pairs. Make sure its exactly the amount of pairs i will specify in the topic. You response should be a plain string, and only follow the formatting rules i will give you. Here is the topic : ",
             @" each question and detailled answer should be seperated by a ':', and each pair of question+answer should be seperated by a ';'. Please
             do not include any return to lines, and give me the question, followed by a ':', followed by the answer, followed by a ';' and then the next question answer pair so on and so on
             of course replace question and aswer with the actual question and actual answer
