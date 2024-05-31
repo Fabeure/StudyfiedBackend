@@ -17,32 +17,54 @@ namespace StudyfiedBackend.Controllers.Quize
             _quizRepository = context.GetRepository<Quiz>();
         }
 
-        public BaseResponse<Quiz> getQuiz(string topic, string difficulty="medium", int numberOfQuestion=5)
+        public BaseResponse<Quiz> getQuiz(string topic, string difficulty = "medium", int numberOfQuestions = 5)
         {
-            if (topic == null || topic == "" )  
+            try
             {
-                return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null);
-            }
-
-            Quiz quiz = new Quiz(topic, difficulty, numberOfQuestion);
-
-            List<Question> questions = QuizHelper.GenerateQuestion(topic, difficulty,numberOfQuestion,_geminiClient);
-
-            foreach (Question question in questions)
-            {
-                if (question != null)
+                if (topic == null || topic == "")
                 {
-                    List<Response> responses = QuizHelper.GenerateResponses(question, _geminiClient);
-                    quiz.questionAnswerPairs.Add(question, responses);
+                    return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null, "Please enter a valid topic");
                 }
-            }
 
-            if (!QuizHelper.isValidQuiz(quiz: quiz, numberOfQuestion: numberOfQuestion))
-            {
-                return getQuiz(topic: topic, difficulty: difficulty, numberOfQuestion: numberOfQuestion);
+                if (numberOfQuestions > 8 || numberOfQuestions == 0)
+                {
+                    return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null, "Please enter a valid amount of questions: no more than 8");
+                }
+
+                Quiz quiz = new Quiz(topic, difficulty, numberOfQuestions);
+
+                List<Question> questions = new List<Question>();
+                var isValidQuestions = false;
+
+                while (!isValidQuestions)
+                {
+                    Thread.Sleep(500);
+                    questions = QuizHelper.GenerateQuestion(topic, difficulty, numberOfQuestions, _geminiClient);
+                    isValidQuestions = QuizHelper.isValidQuestions(questions: questions, numberOfQuestions: numberOfQuestions);
+                }
+
+                foreach (Question question in questions)
+                {
+                    List<Answer> answers = new List<Answer>();
+                    var isValidAnswers = false;
+
+                    while (!isValidAnswers)
+                    {
+                        Thread.Sleep(500);
+                        answers = QuizHelper.GenerateResponses(question, _geminiClient);
+                        isValidAnswers = QuizHelper.isValidAnswers(answers: answers);
+                    }
+                    quiz.questionAnswerPairs.Add(question.content, answers);
+                }
+                return new BaseResponse<Quiz>(ResultCodeEnum.Success, quiz, "Successfully generated quiz");
             }
-            return new BaseResponse<Quiz>(ResultCodeEnum.Success, quiz, "Succesfully generated quiz");
+            catch (Exception ex)
+            {
+                // We should probably log a message here to keep track of things
+                return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null, $"An error occurred: Please try again in a few seconds.");
+            }
         }
+
 
         public PrimitiveBaseResponse<bool> persistQuiz(Quiz quizWithUserId)
         {

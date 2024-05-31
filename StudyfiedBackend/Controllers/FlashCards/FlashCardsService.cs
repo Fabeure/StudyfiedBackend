@@ -17,13 +17,14 @@ namespace StudyfiedBackend.Controllers.FlashCards
             _geminiClient = geminiClient;
             _flashCardRepository = context.GetRepository<FlashCard>();
         }
-        public BaseResponse<FlashCard> getFlashCard(string topic)
+        public BaseResponse<FlashCard> getFlashCard(string topic, int numberOfFlashcards)
         {
             if (topic == null || topic == "")
             {
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null);
             }
 
+            topic = FlashCardsHelpers.insertNumberOfFlashCardsToTopic(topic, numberOfFlashcards);
             topic = PromptHelper.addHelperToPrompt(topic, 0, 0);
             topic = PromptHelper.addHelperToPrompt(topic, 1, 1);
 
@@ -32,9 +33,8 @@ namespace StudyfiedBackend.Controllers.FlashCards
             if (geminiResponse != null)
             {
                 FlashCard flashCard = FlashCardsHelpers.processFlashCardResponse(geminiResponse);
-                if (!FlashCardsHelpers.validateFlashCardResult(flashCard))
-                {
-                    return getFlashCard(topic);
+                if (!FlashCardsHelpers.validateFlashCardResult(flashCard, numberOfFlashcards)) {
+                    return getFlashCard(topic, numberOfFlashcards);
                 }
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Success, flashCard, "Succesfully fetched FlashCards");
             }

@@ -1,6 +1,5 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
-using StudyfiedBackend.Controllers.FlashCards;
 using StudyfiedBackend.Models;
 using StudyfiedBackendUnitTests.Helpers.ServiceInterfaces;
 using StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards;
@@ -33,7 +32,7 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
                 { "question2", "answer2" },
             };
 
-            FlashCard flashCard = new FlashCard(items: testData, userId:"salem ena user");
+            FlashCard flashCard = new FlashCard(items: testData, userId: "salem ena user");
 
             //Act
             service.persistFlashCard(flashCardWithUserId: flashCard);
