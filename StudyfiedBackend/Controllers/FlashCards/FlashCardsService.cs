@@ -12,7 +12,8 @@ namespace StudyfiedBackend.Controllers.FlashCards
         private readonly IGeminiClient _geminiClient;
         private readonly IMongoRepository<FlashCard> _flashCardRepository;
 
-        public FlashCardsService(IGeminiClient geminiClient, IMongoContext context) {
+        public FlashCardsService(IGeminiClient geminiClient, IMongoContext context)
+        {
             _geminiClient = geminiClient;
             _flashCardRepository = context.GetRepository<FlashCard>();
         }
@@ -31,7 +32,8 @@ namespace StudyfiedBackend.Controllers.FlashCards
             if (geminiResponse != null)
             {
                 FlashCard flashCard = FlashCardsHelpers.processFlashCardResponse(geminiResponse);
-                if (!FlashCardsHelpers.validateFlashCardResult(flashCard)) {
+                if (!FlashCardsHelpers.validateFlashCardResult(flashCard))
+                {
                     return getFlashCard(topic);
                 }
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Success, flashCard, "Succesfully fetched FlashCards");
@@ -58,7 +60,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
             {
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Success, flashCard, $"Succesfully fetched flash card {flashCard.Id}");
             }
-            return new BaseResponse<FlashCard> (ResultCodeEnum.Failed, null, $"No flash card with id {id} found");
+            return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null, $"No flash card with id {id} found");
         }
 
         public BaseResponse<List<FlashCard>> getBatchExistingFlashCard(string[] id)
