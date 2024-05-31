@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DotnetGeminiSDK.Model.Request;
+using Newtonsoft.Json;
 using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.Models;
 using System;
@@ -27,6 +28,7 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
 
             BaseResponse<List<FlashCard>>? deserializedResponse = response.Content.ReadFromJsonAsync<BaseResponse<List<FlashCard>>>().Result;
 
+            if (deserializedResponse == null ) { throw new Exception(message: "Error deserializing response. Please check your return type"); }
             return deserializedResponse.ResultItem;
         }
 
@@ -38,13 +40,20 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
 
             BaseResponse<FlashCard>? deserializedResponse = response.Content.ReadFromJsonAsync<BaseResponse<FlashCard>>().Result;
 
-            if (deserializedResponse == null) { throw new Exception(message: "Error deserializing response. Please check your return type"); }
+            if (deserializedResponse == null || deserializedResponse.ResultItem == null) { throw new Exception(message: "Error deserializing response. Please check your return type"); }
             return deserializedResponse.ResultItem;
         }
 
-        public BaseResponse<FlashCard> getFlashCard(HttpClient client, string topic)
+        public FlashCard getFlashCard(string topic, int numberOfFlashCards)
         {
-            throw new NotImplementedException();
+            var url = $"{URLEnums.FLASHCARDS}/getFlashCard?{nameof(topic)}={topic}&{nameof(numberOfFlashCards)}={numberOfFlashCards}";
+
+            var response = _httpClient.PostAsync(url, null).Result;
+
+            BaseResponse<FlashCard>? deserializedResponse = response.Content.ReadFromJsonAsync<BaseResponse<FlashCard>>().Result;
+
+            if (deserializedResponse == null || deserializedResponse.ResultItem == null) { throw new Exception(message: "Error deserializing response. Please check your return type"); }
+            return deserializedResponse.ResultItem;
         }
 
         public bool? persistFlashCard(FlashCard flashCardWithUserId)

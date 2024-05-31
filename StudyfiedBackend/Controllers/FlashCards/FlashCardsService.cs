@@ -4,6 +4,7 @@ using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.Controllers.Gemini;
 using StudyfiedBackend.DataLayer;
 using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
+using MongoDB.Driver;
 
 namespace StudyfiedBackend.Controllers.FlashCards
 {
@@ -76,6 +77,18 @@ namespace StudyfiedBackend.Controllers.FlashCards
         {
             List<FlashCard> flashCards = _flashCardRepository.GetAllAsync().Result.ToList();
             return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Success, flashCards, "flashcards fetched!");
+        }
+
+        public BaseResponse<List<FlashCard>> getFlashCardsByUserId(string userId)
+        {
+            var filter = Builders<FlashCard>.Filter.Eq("userId", userId);
+            List<FlashCard> flashCards = _flashCardRepository.GetByFilter(filter).Result.ToList();
+
+            if (flashCards != null)
+            {
+                return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Success, flashCards, $"found {flashCards.Count()} flashcards with user id : {userId}");
+            }
+            return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Failed, null, "failed to fetch flashCards");
         }
     }
 }
