@@ -8,7 +8,7 @@ using StudyfiedBackend.DataLayer;
 
 namespace StudyfiedBackendUnitTests.Mock.DataLayer
 {
-    public class FakeClientWithInMemoryDataLayer : IDisposable
+    public class FakeServiceWithInMemoryDataLayer : IDisposable
     {
         private readonly WebApplicationFactory<Program> _appFactory;
         public MongoDbRunner Runner { get; }
@@ -17,7 +17,7 @@ namespace StudyfiedBackendUnitTests.Mock.DataLayer
 
         public HttpClient FakeHttpClient { get; }
 
-        public FakeClientWithInMemoryDataLayer()
+        public FakeServiceWithInMemoryDataLayer()
         {
             Runner = MongoDbRunner.Start();
             Client = new MongoClient(Runner.ConnectionString);
@@ -48,7 +48,7 @@ namespace StudyfiedBackendUnitTests.Mock.DataLayer
     }
 
     [CollectionDefinition("Database collection")]
-    public class DatabaseCollectionWithWebAppFactory : ICollectionFixture<FakeClientWithInMemoryDataLayer>
+    public class DatabaseCollectionWithWebAppFactory : ICollectionFixture<FakeServiceWithInMemoryDataLayer>
     {
         // This class has no code, and is never created. Its purpose is simply
         // to be the place to apply [CollectionDefinition] and all the

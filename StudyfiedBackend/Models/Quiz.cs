@@ -18,7 +18,7 @@ namespace StudyfiedBackend.Models
         public string? difficulty { get; set; }
 
         public int? numberOfQuestion { get; set; }
-        public Dictionary<Question, List<Response>> questionAnswerPairs { get; set; }
+        public Dictionary<string, List<Answer>> questionAnswerPairs { get; set; }
 
 
         public Quiz(string topic, string difficulty, int numberOfQuestion, string userId = "NA")
@@ -26,7 +26,7 @@ namespace StudyfiedBackend.Models
             this.userId = userId;
             this.topic = topic;
             this.difficulty = difficulty;
-            this.questionAnswerPairs = new Dictionary<Question, List<Response>>();
+            this.questionAnswerPairs = new Dictionary<string, List<Answer>>();
             this.numberOfQuestion = numberOfQuestion;
         }
 
