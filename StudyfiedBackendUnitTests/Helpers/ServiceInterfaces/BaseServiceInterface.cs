@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces
@@ -18,6 +19,14 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces
         public BaseServiceInterface(HttpClient client)
         {
             _httpClient = client;
+        }
+
+        public StringContent GetContent(object objectToSerialize)
+        {
+            return new StringContent(
+                JsonSerializer.Serialize(objectToSerialize),
+                Encoding.UTF8,
+                "application/json");
         }
     }
 }

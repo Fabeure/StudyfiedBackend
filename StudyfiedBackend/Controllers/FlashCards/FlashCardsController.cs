@@ -16,7 +16,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
         }
 
         [HttpPost("getFlashCard")]
-        public BaseResponse<FlashCard> get(string topic, int numberOfFlashCards)
+        public BaseResponse<FlashCard> getFlashCard(string topic, int numberOfFlashCards)
         {
             return flashCardsService.getFlashCard(topic, numberOfFlashCards);
         }
@@ -31,6 +31,12 @@ namespace StudyfiedBackend.Controllers.FlashCards
         public BaseResponse<FlashCard> getExistingFlashCard(string id)
         {
             return flashCardsService.getExistingFlashCard(id);
+        }
+
+        [HttpGet("getFlashCardsByUserId")]
+        public BaseResponse<List<FlashCard>> getFlashCardsByUserId(string userId)
+        {
+            return flashCardsService.getFlashCardsByUserId(userId);
         }
 
         [HttpGet("getAllFlashCards")]

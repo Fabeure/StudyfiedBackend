@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using MongoDbGenericRepository.Models;
+﻿using MongoDB.Driver;
 
 namespace StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository
 {
@@ -58,5 +56,9 @@ namespace StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository
             return await _collection.Find(filter).ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> GetByFilter(FilterDefinition<T> filter)
+        {
+            return await _collection.FindAsync(filter).Result.ToListAsync();
+        }
     }
 }

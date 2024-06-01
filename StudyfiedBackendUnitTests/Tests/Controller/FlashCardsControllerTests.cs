@@ -22,10 +22,7 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
         [Fact]
         public void InsertAndGetAllFlashCardsTest()
         {
-
-
             //Arrange
-
             Dictionary<string, string> testData = new Dictionary<string, string>()
             {
                 { "question1", "answer1" },
@@ -43,6 +40,23 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
             flashcards.Count.Should().Be(1);
             flashcards.First().items.Should().NotBeNull();
             flashcards.First().items.Should().Equal(testData);
+        }
+
+        [Fact]
+        public void getFlashCardTest()
+        {
+            string randomTopic = "gorillas";
+            int numberOfFlashCards = 5; // we will check that 1,2,3,4 and 5 flashcards can be succesfully generated
+
+            for (int i=0; i<numberOfFlashCards; i++)
+            {
+                FlashCard flashCard = service.getFlashCard(randomTopic, i+1);
+                flashCard.Should().NotBeNull();
+                flashCard.items.Count().Should().Be(i+1);
+                flashCard.items.Keys.Should().NotContainNulls();
+                flashCard.items.Keys.Should().AllSatisfy(ques => ques.Should().NotBeNullOrWhiteSpace().And.NotBeNullOrEmpty());
+                flashCard.items.Values.Should().AllSatisfy(ans => ans.Should().NotBeNullOrWhiteSpace().And.NotBeNullOrEmpty());
+            }
         }
 
         [Fact]
