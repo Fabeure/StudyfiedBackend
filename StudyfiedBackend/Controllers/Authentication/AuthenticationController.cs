@@ -118,7 +118,8 @@ namespace StudyfiedBackend.Controllers.Authentication
                     Message = "Login Successful",
                     Email = user.Email,
                     Success = true,
-                    UserId = user.Id.ToString()
+                    UserId = user.Id.ToString(),
+                    Name = user.Name,
                 };
             }
             catch (Exception ex)
