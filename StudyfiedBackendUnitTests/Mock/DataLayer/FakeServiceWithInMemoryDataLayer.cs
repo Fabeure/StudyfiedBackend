@@ -12,7 +12,9 @@ namespace StudyfiedBackendUnitTests.Mock.DataLayer
     public class FakeServiceWithInMemoryDataLayer : IDisposable
     {
 
-        public static int totalTests = 4;
+        // THIS HAS TO STAY UP TO DATE WITH THE TOTAL NUMBER OF TESTS TO RUN
+        // OR THE MONGO RUNNER WON'T PROPERLY DISPOSE (WILL KEEP RUNNING IN THE BACKGROUND)
+        public static int totalTests = 5;
         private readonly WebApplicationFactory<Program> _appFactory;
         public MongoDbRunner Runner { get; }
         public MongoClient Client { get; }

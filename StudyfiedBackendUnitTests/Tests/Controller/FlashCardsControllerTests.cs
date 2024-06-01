@@ -101,6 +101,30 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
             service.getAllFlashCards().Should().BeEmpty();
         }
 
+        [Fact]
+        public void UpdateFlashCardTest()
+        {
+            //Arrange
+            string topic = "history";
+            int numberOfFlashCards = 3;
+
+            FlashCard flashCard = service.generateFlashCard(topic, numberOfFlashCards);
+
+            service.persistFlashCard(flashCard);
+
+            FlashCard addedFlashCard = service.getAllFlashCards().First();
+
+            //Act 
+            addedFlashCard.userId = "this is a test";
+
+            service.updateFlashCard(flashCardToUpdate: addedFlashCard);
+
+            FlashCard updatedFlashCard = service.getAllFlashCards().First();
+
+            updatedFlashCard.userId.Should().Be(addedFlashCard.userId);
+
+        }
+
         public void Dispose()
         {
             fakeClientWithInMemoryDataLayer.Dispose();

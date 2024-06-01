@@ -23,12 +23,27 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
 
         public List<FlashCard> getAllFlashCards()
         {
-            var url = $"{URLEnums.FLASHCARDS}/getAllFlashCards?";
+            var url = $"{URLEnums.FLASHCARDS}/getAllFlashCards";
             var response = _httpClient.GetAsync(url).Result;
 
             BaseResponse<List<FlashCard>>? deserializedResponse = response.Content.ReadFromJsonAsync<BaseResponse<List<FlashCard>>>().Result;
 
             if (deserializedResponse == null || deserializedResponse.ResultItem == null) { throw new Exception(message: "Error deserializing response. Please check your return type"); }
+            return deserializedResponse.ResultItem;
+        }
+
+        public bool? updateFlashCard(FlashCard flashCardToUpdate)
+        {
+            var url = $"{URLEnums.FLASHCARDS}/updateFlashCard";
+
+            // Prepare JSON string from FlashCard object
+            var jsonContent = JsonConvert.SerializeObject(flashCardToUpdate);
+            var stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = _httpClient.PostAsync(url, stringContent).Result;
+            PrimitiveBaseResponse<bool>? deserializedResponse = response.Content.ReadFromJsonAsync<PrimitiveBaseResponse<bool>>().Result;
+
+            if (deserializedResponse == null) { throw new Exception(message: "Error deserializing response. Please check your return type"); }
             return deserializedResponse.ResultItem;
         }
 
