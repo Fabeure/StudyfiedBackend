@@ -45,6 +45,13 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return flashCardsService.getAllFlashCards();
         }
 
+        [HttpPost("updateFlashCard")]
+        public PrimitiveBaseResponse<bool> updateFlashCard(FlashCard flashCard)
+        {
+            return flashCardsService.updateFlashCard(flashCard);
+        }
+
+        [HttpGet("deleteFlashCard")]
         [HttpPost("deleteFlashCard")]
         public PrimitiveBaseResponse<bool> deleteFlashCard(string id)
         {
