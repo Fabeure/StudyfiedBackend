@@ -3,6 +3,7 @@ using StudyfiedBackend.Models;
 using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.DataLayer;
 using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
+using MongoDB.Driver;
 
 namespace StudyfiedBackend.Controllers.Quize
 {
@@ -60,6 +61,7 @@ namespace StudyfiedBackend.Controllers.Quize
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message.ToString());
                 // We should probably log a message here to keep track of things
                 return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null, $"An error occurred: Please try again in a few seconds.");
             }
@@ -91,6 +93,80 @@ namespace StudyfiedBackend.Controllers.Quize
             }
 
             return new BaseResponse<Quiz>(ResultCodeEnum.Success, quiz, "Succesfully fetched Quiz");
+        }
+
+        public BaseResponse<List<Quiz>> getBatchExistingQuiz(string[] id)
+        {
+            List<Quiz> quizzes = _quizRepository.GetDocumentsByIdsAsync(id).Result.ToList();
+            if (quizzes == null)
+            {
+                return new BaseResponse<List<Quiz>>(ResultCodeEnum.Failed, null,"failed to fetch quizzes");
+            }
+
+            return new BaseResponse<List<Quiz>>(ResultCodeEnum.Success, quizzes, "Succesfully fetched Quizzes");
+        }   
+
+        public PrimitiveBaseResponse<bool> updateQuiz(Quiz updatedQuiz)
+        {
+            if (updatedQuiz == null || string.IsNullOrEmpty(updatedQuiz.Id))
+            {
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, "Quiz not found");
+            }
+
+            bool updated = _quizRepository.UpdateAsync(updatedQuiz.Id, updatedQuiz).Result;
+            if (updated)
+            {
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, $"Quiz updated successfully for user {updatedQuiz.userId}");
+            }
+            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"Quiz not updated for user {updatedQuiz.userId}");
+        }
+
+        public PrimitiveBaseResponse<bool> deleteQuiz(string id)
+        {
+            bool deleted = _quizRepository.DeleteAsync(id).Result;
+            if (deleted)
+            {
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, $"Quiz with id : {id} deleted successfully ");
+            }
+            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"Quiz not deleted");
+        }
+
+        public PrimitiveBaseResponse<bool> deleteBatchQuiz(string[] id)
+        {
+            bool deleted = _quizRepository.BatchDelete(id).Result;
+            if (deleted)
+            {
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, $"Quizzes with ids : {id} deleted successfully ");
+            }
+            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"Quizzes not deleted");
+        }
+
+        public BaseResponse<List<Quiz>> getAllQuizzes()
+        {
+            List<Quiz> quizzes = _quizRepository.GetAllAsync().Result.ToList();
+            if (quizzes == null)
+            {
+                return new BaseResponse<List<Quiz>>(ResultCodeEnum.Failed, null, "failed to fetch quizzes");
+            }
+
+            return new BaseResponse<List<Quiz>>(ResultCodeEnum.Success, quizzes, "Succesfully fetched Quizzes");
+        }
+
+        public BaseResponse<List<Quiz>> getQuizzesByUserId(string userId)
+        {
+            if (userId == null || userId == "")
+            {
+                return new BaseResponse<List<Quiz>>(ResultCodeEnum.Failed, null, "Please enter a valid userId");
+            }
+
+            var filter = Builders<Quiz>.Filter.Eq("userId", userId);
+            List<Quiz> quizzes = _quizRepository.GetByFilter(filter).Result.ToList();
+            if (quizzes == null)
+            {
+                return new BaseResponse<List<Quiz>>(ResultCodeEnum.Failed, null, "failed to fetch quizzes");
+            }
+
+            return new BaseResponse<List<Quiz>>(ResultCodeEnum.Success, quizzes, $"found {quizzes.Count()} Quizzes with the user id : {userId}");
         }
     }
 }

@@ -15,10 +15,10 @@ namespace StudyfiedBackend.Controllers.FlashCards
             this.flashCardsService = flashCardsService;
         }
 
-        [HttpPost("getFlashCard")]
-        public BaseResponse<FlashCard> get(string topic, int numberOfFlashCards)
+        [HttpPost("generateFlashCard")]
+        public BaseResponse<FlashCard> generateFlashCard(string topic, int numberOfFlashCards)
         {
-            return flashCardsService.getFlashCard(topic, numberOfFlashCards);
+            return flashCardsService.generateFlashCard(topic, numberOfFlashCards);
         }
 
         [HttpPost("persistFlashCard")]
@@ -27,16 +27,40 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return flashCardsService.persistFlashCard(flashCardWithUserId);
         }
 
-        [HttpGet("getExistingFlashCard")]
-        public BaseResponse<FlashCard> getExistingFlashCard(string id)
+        [HttpGet("getFlashCardById")]
+        public BaseResponse<FlashCard> getFlashCardById(string id)
         {
-            return flashCardsService.getExistingFlashCard(id);
+            return flashCardsService.getFlashCardById(id);
+        }
+
+        [HttpGet("getFlashCardsByUserId")]
+        public BaseResponse<List<FlashCard>> getFlashCardsByUserId(string userId)
+        {
+            return flashCardsService.getFlashCardsByUserId(userId);
         }
 
         [HttpGet("getAllFlashCards")]
         public BaseResponse<List<FlashCard>> getAllFlashCards()
         {
             return flashCardsService.getAllFlashCards();
+        }
+
+        [HttpPost("updateFlashCard")]
+        public PrimitiveBaseResponse<bool> updateFlashCard(FlashCard flashCard)
+        {
+            return flashCardsService.updateFlashCard(flashCard);
+        }
+
+        [HttpPost("deleteFlashCard")]
+        public PrimitiveBaseResponse<bool> deleteFlashCard(string id)
+        {
+            return flashCardsService.deleteFlashCard(id);
+        }
+
+        [HttpPost("batchDeleteFlashCards")]
+        public PrimitiveBaseResponse<bool> batchDeleteFlashCards(string[] ids)
+        {
+            return flashCardsService.batchDeleteFlashCards(ids);
         }
 
     }
