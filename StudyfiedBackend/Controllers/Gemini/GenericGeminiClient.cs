@@ -11,13 +11,13 @@ namespace StudyfiedBackend.Controllers.Gemini
         {
             var response = await geminiClient.TextPrompt(textPrompt);
 
-            if (response != null)
+            if (isValidResponseContents(response))
             {
                 return response;
             }
             else
             {
-                return null;
+                return GetTextPrompt(geminiClient, textPrompt).Result;
             }
         }
 
@@ -33,6 +33,15 @@ namespace StudyfiedBackend.Controllers.Gemini
             {
                 return null;
             }
+        }
+
+        public static bool isValidResponseContents(GeminiMessageResponse response)
+        {
+            return response != null &&
+                response.Candidates[0] != null &&
+                response.Candidates[0].Content != null &&
+                response.Candidates[0].Content.Parts[0] != null &&
+                response.Candidates[0].Content.Parts[0].Text != null;
         }
     }
 }

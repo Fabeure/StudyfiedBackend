@@ -74,7 +74,24 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
         public bool? deleteFlashCard(string id)
         {
             var url = $"{URLEnums.FLASHCARDS}/deleteFlashCard?{nameof(id)}={id}";
-            var response = _httpClient.GetAsync(url).Result;
+            var response = _httpClient.PostAsync(url, null).Result;
+
+            PrimitiveBaseResponse<bool>? deserializedResponse = response.Content.ReadFromJsonAsync<PrimitiveBaseResponse<bool>>().Result;
+
+            if (deserializedResponse == null) { throw new Exception(message: "Error deserializing response. Please check your return type"); }
+            return deserializedResponse.ResultItem;
+        }
+
+        public bool? batchDeleteFlashCards(IEnumerable<string> ids)
+        {
+            var url = $"{URLEnums.FLASHCARDS}/batchDeleteFlashCards";
+
+            // Prepare JSON string from FlashCard object
+            var jsonContent = JsonConvert.SerializeObject(ids);
+            var stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+
+            var response = _httpClient.PostAsync(url, stringContent).Result;
 
             PrimitiveBaseResponse<bool>? deserializedResponse = response.Content.ReadFromJsonAsync<PrimitiveBaseResponse<bool>>().Result;
 

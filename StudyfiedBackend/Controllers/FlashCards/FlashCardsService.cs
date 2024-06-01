@@ -31,7 +31,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
 
             var geminiResponse = GenericGeminiClient.GetTextPrompt(_geminiClient, topic).Result;
 
-            if (geminiResponse != null)
+            if (geminiResponse != null || string.IsNullOrEmpty(geminiResponse.Candidates[0].Content.Parts[0].Text))
             {
                 FlashCard flashCard = FlashCardsHelpers.processFlashCardResponse(geminiResponse);
                 if (!FlashCardsHelpers.validateFlashCardResult(flashCard, numberOfFlashcards)) {
@@ -64,9 +64,9 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null, $"No flash card with id {id} found");
         }
 
-        public BaseResponse<List<FlashCard>> getBatchExistingFlashCard(string[] id)
+        public BaseResponse<List<FlashCard>> getBatchExistingFlashCard(string[] ids)
         {
-            List<FlashCard> flashCards = _flashCardRepository.GetDocumentsByIdsAsync(id).Result.ToList();
+            List<FlashCard> flashCards = _flashCardRepository.GetDocumentsByIdsAsync(ids).Result.ToList();
             if (flashCards != null)
             {
                 return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Success, flashCards, "flashCards fetched");
@@ -98,12 +98,12 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"FlashCard not deleted");
         }
 
-        public PrimitiveBaseResponse<bool> deleteBatchFlashCard(string[] id)
+        public PrimitiveBaseResponse<bool> batchDeleteFlashCards(string[] ids)
         {
-           bool deleted = _flashCardRepository.BatchDelete(id).Result;
+           bool deleted = _flashCardRepository.BatchDelete(ids).Result;
             if (deleted)
             {
-                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, $"FlashCards with ids : {id} deleted successfully ");
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, $"FlashCards with ids : {ids} deleted successfully ");
             }
             return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"FlashCards not deleted");    
         }   

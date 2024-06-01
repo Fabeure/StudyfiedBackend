@@ -1,10 +1,7 @@
-﻿using FakeItEasy;
-using FluentAssertions;
+﻿using FluentAssertions;
 using StudyfiedBackend.Models;
-using StudyfiedBackendUnitTests.Helpers.ServiceInterfaces;
 using StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards;
 using StudyfiedBackendUnitTests.Mock.DataLayer;
-using static System.Net.WebRequestMethods;
 
 namespace StudyfiedBackendUnitTests.Tests.Controller
 {
@@ -67,18 +64,40 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
             int numberOfFlashCards = 3;
             
             FlashCard flashCard = service.getFlashCard(topic, numberOfFlashCards);
-            flashCard.Id = "6610720df900c331c96abd76";
+
             service.persistFlashCard(flashCard);
-            List<FlashCard> test = service.getAllFlashCards();  
-            FlashCard fetchedFlashCard = service.getExistingFlashCard(flashCard.Id);
+
+            FlashCard addedFlashCard = service.getAllFlashCards().First();
 
             //Act
-            bool? result = service.deleteFlashCard(fetchedFlashCard.Id);
+            bool? result = service.deleteFlashCard(addedFlashCard.Id);
 
             //Assert
+            service.getAllFlashCards().Should().BeEmpty();
             result.Should().BeTrue();
+        }
 
-           
+        [Fact]
+        public void BatchDeleteFlashCardTest()
+        {
+            //Arrange
+            string topic = "history";
+            int numberOfFlashCards = 3;
+
+            for (int i=0; i<2; i++)
+            {
+                FlashCard flashCard = service.getFlashCard(topic, numberOfFlashCards);
+                service.persistFlashCard(flashCard);
+            }
+
+            List<FlashCard> addedFlashCards = service.getAllFlashCards();
+            List<string> ids = addedFlashCards.Select(flashcard => flashcard.Id).ToList();
+
+            //Act
+            bool result = service.batchDeleteFlashCards(ids).Value;
+
+            //Assert
+            service.getAllFlashCards().Should().BeEmpty();
         }
     }
 }

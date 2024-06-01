@@ -44,7 +44,7 @@ namespace StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository
 
         public async Task<bool> BatchDelete(IEnumerable<string> ids)
         {
-            var filter = Builders<T>.Filter.In("_id", ids);
+            var filter = Builders<T>.Filter.In("Id", ids);
             var deleteResult = await _collection.DeleteManyAsync(filter);
             return deleteResult.DeletedCount == ids.Count() && deleteResult.IsAcknowledged;
         }
