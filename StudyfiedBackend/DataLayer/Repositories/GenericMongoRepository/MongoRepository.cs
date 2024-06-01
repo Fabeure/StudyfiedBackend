@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using MongoDbGenericRepository.Models;
+﻿using MongoDB.Driver;
 
 namespace StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository
 {
@@ -41,7 +39,14 @@ namespace StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository
         {
             var filter = Builders<T>.Filter.Eq("Id", id);
             var deleteResult = await _collection.DeleteOneAsync(filter);
-            return deleteResult.DeletedCount > 0;
+            return deleteResult.DeletedCount == 1 && deleteResult.IsAcknowledged;
+        }
+
+        public async Task<bool> BatchDelete(IEnumerable<string> ids)
+        {
+            var filter = Builders<T>.Filter.In("Id", ids);
+            var deleteResult = await _collection.DeleteManyAsync(filter);
+            return deleteResult.DeletedCount == ids.Count() && deleteResult.IsAcknowledged;
         }
 
         public async Task<IEnumerable<T>> GetDocumentsByIdsAsync(IEnumerable<string> ids)
@@ -51,5 +56,9 @@ namespace StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository
             return await _collection.Find(filter).ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> GetByFilter(FilterDefinition<T> filter)
+        {
+            return await _collection.FindAsync(filter).Result.ToListAsync();
+        }
     }
 }
