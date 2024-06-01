@@ -12,5 +12,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
         public BaseResponse<List<FlashCard>> getFlashCardsByUserId(string userId);
         public BaseResponse<List<FlashCard>> getAllFlashCards();
         public PrimitiveBaseResponse<bool> deleteFlashCard(string id);
+        public PrimitiveBaseResponse<bool> updateFlashCard(FlashCard updatedFlashCard);
+        public PrimitiveBaseResponse<bool> deleteBatchFlashCard(string[] id);
     }
 }

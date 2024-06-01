@@ -33,5 +33,41 @@ namespace StudyfiedBackend.Controllers.Quize
             return quizService.getExistingQuiz(id);
         }
 
+        [HttpGet("getBatchExistingQuiz")]
+        public BaseResponse<List<Quiz>> getBatchExistingQuiz(string[] id)
+        {
+            return quizService.getBatchExistingQuiz(id);
+        }
+
+        [HttpGet("getQuizzesByUserId")]
+        public BaseResponse<List<Quiz>> getQuizzesByUserId(string userId)
+        {
+            return quizService.getQuizzesByUserId(userId);
+        }
+
+        [HttpGet("getAllQuizzes")]
+        public BaseResponse<List<Quiz>> getAllQuizzes()
+        {
+            return quizService.getAllQuizzes();
+        }
+
+        [HttpPost("updateQuiz")]
+        public PrimitiveBaseResponse<bool> updateQuiz(Quiz quiz)
+        {
+            return quizService.updateQuiz(quiz);
+        }
+
+        [HttpGet("deleteQuiz")]
+        public PrimitiveBaseResponse<bool> deleteQuiz(string id)
+        {
+            return quizService.deleteQuiz(id);
+        }
+
+        [HttpGet("deleteBatchQuiz")]
+        public PrimitiveBaseResponse<bool> deleteBatchQuiz(string[] id)
+        {
+            return quizService.deleteBatchQuiz(id);
+        }
+
     }
 }
