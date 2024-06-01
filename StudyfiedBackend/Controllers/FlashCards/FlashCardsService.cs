@@ -31,7 +31,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
 
             var geminiResponse = GenericGeminiClient.GetTextPrompt(_geminiClient, topic).Result;
 
-            if (geminiResponse != null || string.IsNullOrEmpty(geminiResponse.Candidates[0].Content.Parts[0].Text))
+            if (geminiResponse != null && !string.IsNullOrEmpty(geminiResponse.Candidates[0].Content.Parts[0].Text))
             {
                 FlashCard flashCard = FlashCardsHelpers.processFlashCardResponse(geminiResponse);
                 if (!FlashCardsHelpers.validateFlashCardResult(flashCard, numberOfFlashcards)) {
@@ -41,7 +41,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
             }
             else
             {
-                return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null);
+                return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null, "Error fetching flashcard, please try again");
             }
         }
         public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId)
