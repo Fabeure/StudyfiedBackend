@@ -63,11 +63,22 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
         public void DeleteFlashCardTest()
         {
             //Arrange
-            Dictionary<string,string> testdata = new Dictionary<string, string>()
-            {
-                { "question1", "answer1" },
-                { "question2", "answer2" },
-            };
+            string topic = "history";
+            int numberOfFlashCards = 3;
+            
+            FlashCard flashCard = service.getFlashCard(topic, numberOfFlashCards);
+            flashCard.Id = "6610720df900c331c96abd76";
+            service.persistFlashCard(flashCard);
+            List<FlashCard> test = service.getAllFlashCards();  
+            FlashCard fetchedFlashCard = service.getExistingFlashCard(flashCard.Id);
+
+            //Act
+            bool? result = service.deleteFlashCard(fetchedFlashCard.Id);
+
+            //Assert
+            result.Should().BeTrue();
+
+           
         }
     }
 }

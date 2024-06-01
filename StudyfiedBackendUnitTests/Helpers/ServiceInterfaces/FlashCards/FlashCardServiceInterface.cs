@@ -70,5 +70,16 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
             if (deserializedResponse == null) { throw new Exception(message: "Error deserializing response. Please check your return type"); }
             return deserializedResponse.ResultItem;
         }
+
+        public bool? deleteFlashCard(string id)
+        {
+            var url = $"{URLEnums.FLASHCARDS}/deleteFlashCard?{nameof(id)}={id}";
+            var response = _httpClient.GetAsync(url).Result;
+
+            PrimitiveBaseResponse<bool>? deserializedResponse = response.Content.ReadFromJsonAsync<PrimitiveBaseResponse<bool>>().Result;
+
+            if (deserializedResponse == null) { throw new Exception(message: "Error deserializing response. Please check your return type"); }
+            return deserializedResponse.ResultItem;
+        }
     }
 }
