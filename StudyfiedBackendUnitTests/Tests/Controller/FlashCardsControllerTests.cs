@@ -44,5 +44,16 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
             flashcards.First().items.Should().NotBeNull();
             flashcards.First().items.Should().Equal(testData);
         }
+
+        [Fact]
+        public void DeleteFlashCardTest()
+        {
+            //Arrange
+            Dictionary<string,string> testdata = new Dictionary<string, string>()
+            {
+                { "question1", "answer1" },
+                { "question2", "answer2" },
+            };
+        }
     }
 }

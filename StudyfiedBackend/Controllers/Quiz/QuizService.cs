@@ -60,6 +60,7 @@ namespace StudyfiedBackend.Controllers.Quize
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message.ToString());
                 // We should probably log a message here to keep track of things
                 return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null, $"An error occurred: Please try again in a few seconds.");
             }

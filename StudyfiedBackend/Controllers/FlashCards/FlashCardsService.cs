@@ -72,7 +72,40 @@ namespace StudyfiedBackend.Controllers.FlashCards
             }
             return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Failed, null, "failed to fetch flashCards");
         }
+        
+        public PrimitiveBaseResponse<bool> updateFlashCard (FlashCard updatedFlashCard)
+        {
+            if (updatedFlashCard == null || string.IsNullOrEmpty(updatedFlashCard.Id))
+            {
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, "FlashCard not found");
+            }
+            bool updated = _flashCardRepository.UpdateAsync(updatedFlashCard.Id, updatedFlashCard).Result;
+            if (updated)
+            {
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, $"FlashCard updated successfully for user {updatedFlashCard.userId}");
+            }
+            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"FlashCard not updated for user {updatedFlashCard.userId}");
+        }
 
+        public PrimitiveBaseResponse<bool> deleteFlashCard(string id)
+        {
+            bool deleted = _flashCardRepository.DeleteAsync(id).Result;
+            if (deleted)
+            {
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, $"FlashCard with id : {id} deleted successfully ");
+            }
+            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"FlashCard not deleted");
+        }
+
+        public PrimitiveBaseResponse<bool> deleteBatchFlashCard(string[] id)
+        {
+           bool deleted = _flashCardRepository.BatchDelete(id).Result;
+            if (deleted)
+            {
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Success, true, $"FlashCards with ids : {id} deleted successfully ");
+            }
+            return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"FlashCards not deleted");    
+        }   
         public BaseResponse<List<FlashCard>> getAllFlashCards()
         {
             List<FlashCard> flashCards = _flashCardRepository.GetAllAsync().Result.ToList();

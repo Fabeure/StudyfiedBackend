@@ -8,5 +8,6 @@
         Task<IEnumerable<T>> GetDocumentsByIdsAsync(IEnumerable<string> ids);
         Task<bool> UpdateAsync(string id, T entity);
         Task<bool> DeleteAsync(string id);
+        Task<bool> BatchDelete(IEnumerable<string> ids);
     }
 }

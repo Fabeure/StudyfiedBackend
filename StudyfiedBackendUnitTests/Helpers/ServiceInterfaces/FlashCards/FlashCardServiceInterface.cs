@@ -27,6 +27,7 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
 
             BaseResponse<List<FlashCard>>? deserializedResponse = response.Content.ReadFromJsonAsync<BaseResponse<List<FlashCard>>>().Result;
 
+            if (deserializedResponse == null || deserializedResponse.ResultItem == null) { throw new Exception(message: "Error deserializing response. Please check your return type"); }
             return deserializedResponse.ResultItem;
         }
 

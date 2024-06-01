@@ -41,7 +41,14 @@ namespace StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository
         {
             var filter = Builders<T>.Filter.Eq("_id", id);
             var deleteResult = await _collection.DeleteOneAsync(filter);
-            return deleteResult.DeletedCount > 0;
+            return deleteResult.DeletedCount == 1 && deleteResult.IsAcknowledged;
+        }
+
+        public async Task<bool> BatchDelete(IEnumerable<string> ids)
+        {
+            var filter = Builders<T>.Filter.In("_id", ids);
+            var deleteResult = await _collection.DeleteManyAsync(filter);
+            return deleteResult.DeletedCount == ids.Count() && deleteResult.IsAcknowledged;
         }
 
         public async Task<IEnumerable<T>> GetDocumentsByIdsAsync(IEnumerable<string> ids)
