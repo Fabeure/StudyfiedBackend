@@ -2,11 +2,12 @@
 using StudyfiedBackend.Models;
 using StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards;
 using StudyfiedBackendUnitTests.Mock.DataLayer;
+using System.Diagnostics;
 
 namespace StudyfiedBackendUnitTests.Tests.Controller
 {
     [Collection("Database collection")]
-    public class FlashCardsControllerTests
+    public class FlashCardsControllerTests : IDisposable
     {
         private readonly FakeServiceWithInMemoryDataLayer fakeClientWithInMemoryDataLayer;
         private readonly FlashCardServiceInterface service;
@@ -47,7 +48,7 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
 
             for (int i=0; i<numberOfFlashCards; i++)
             {
-                FlashCard flashCard = service.getFlashCard(randomTopic, i+1);
+                FlashCard flashCard = service.generateFlashCard(randomTopic, i+1);
                 flashCard.Should().NotBeNull();
                 flashCard.items.Count().Should().Be(i+1);
                 flashCard.items.Keys.Should().NotContainNulls();
@@ -63,7 +64,7 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
             string topic = "history";
             int numberOfFlashCards = 3;
             
-            FlashCard flashCard = service.getFlashCard(topic, numberOfFlashCards);
+            FlashCard flashCard = service.generateFlashCard(topic, numberOfFlashCards);
 
             service.persistFlashCard(flashCard);
 
@@ -86,7 +87,7 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
 
             for (int i=0; i<2; i++)
             {
-                FlashCard flashCard = service.getFlashCard(topic, numberOfFlashCards);
+                FlashCard flashCard = service.generateFlashCard(topic, numberOfFlashCards);
                 service.persistFlashCard(flashCard);
             }
 
@@ -98,6 +99,11 @@ namespace StudyfiedBackendUnitTests.Tests.Controller
 
             //Assert
             service.getAllFlashCards().Should().BeEmpty();
+        }
+
+        public void Dispose()
+        {
+            fakeClientWithInMemoryDataLayer.Dispose();
         }
     }
 }

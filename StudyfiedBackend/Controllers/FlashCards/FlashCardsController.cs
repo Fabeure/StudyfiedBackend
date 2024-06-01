@@ -15,10 +15,10 @@ namespace StudyfiedBackend.Controllers.FlashCards
             this.flashCardsService = flashCardsService;
         }
 
-        [HttpPost("getFlashCard")]
-        public BaseResponse<FlashCard> getFlashCard(string topic, int numberOfFlashCards)
+        [HttpPost("generateFlashCard")]
+        public BaseResponse<FlashCard> generateFlashCard(string topic, int numberOfFlashCards)
         {
-            return flashCardsService.getFlashCard(topic, numberOfFlashCards);
+            return flashCardsService.generateFlashCard(topic, numberOfFlashCards);
         }
 
         [HttpPost("persistFlashCard")]
@@ -27,10 +27,10 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return flashCardsService.persistFlashCard(flashCardWithUserId);
         }
 
-        [HttpGet("getExistingFlashCard")]
-        public BaseResponse<FlashCard> getExistingFlashCard(string id)
+        [HttpGet("getFlashCardById")]
+        public BaseResponse<FlashCard> getFlashCardById(string id)
         {
-            return flashCardsService.getExistingFlashCard(id);
+            return flashCardsService.getFlashCardById(id);
         }
 
         [HttpGet("getFlashCardsByUserId")]
@@ -51,7 +51,6 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return flashCardsService.updateFlashCard(flashCard);
         }
 
-        [HttpGet("deleteFlashCard")]
         [HttpPost("deleteFlashCard")]
         public PrimitiveBaseResponse<bool> deleteFlashCard(string id)
         {

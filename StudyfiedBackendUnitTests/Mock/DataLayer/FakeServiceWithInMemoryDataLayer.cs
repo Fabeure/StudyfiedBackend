@@ -5,11 +5,14 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mongo2Go;
 using MongoDB.Driver;
 using StudyfiedBackend.DataLayer;
+using System.Diagnostics;
 
 namespace StudyfiedBackendUnitTests.Mock.DataLayer
 {
     public class FakeServiceWithInMemoryDataLayer : IDisposable
     {
+
+        public static int totalTests = 4;
         private readonly WebApplicationFactory<Program> _appFactory;
         public MongoDbRunner Runner { get; }
         public MongoClient Client { get; }
@@ -42,8 +45,15 @@ namespace StudyfiedBackendUnitTests.Mock.DataLayer
 
         public void Dispose()
         {
-            Runner.Dispose();
-            _appFactory.Dispose();
+            totalTests--;
+            if (totalTests > 0)
+            {
+                Client.DropDatabase("InMemoryDb");
+            }
+            if (totalTests == 0)
+            {
+                Runner.Dispose();
+            }
         }
     }
 

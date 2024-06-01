@@ -18,7 +18,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
             _geminiClient = geminiClient;
             _flashCardRepository = context.GetRepository<FlashCard>();
         }
-        public BaseResponse<FlashCard> getFlashCard(string topic, int numberOfFlashcards)
+        public BaseResponse<FlashCard> generateFlashCard(string topic, int numberOfFlashcards)
         {
             if (topic == null || topic == "")
             {
@@ -35,7 +35,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
             {
                 FlashCard flashCard = FlashCardsHelpers.processFlashCardResponse(geminiResponse);
                 if (!FlashCardsHelpers.validateFlashCardResult(flashCard, numberOfFlashcards)) {
-                    return getFlashCard(topic, numberOfFlashcards);
+                    return generateFlashCard(topic, numberOfFlashcards);
                 }
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Success, flashCard, "Succesfully fetched FlashCards");
             }
@@ -54,7 +54,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, false, $"FlashCard not added for user {flashCardWithUserId.userId}");
         }
 
-        public BaseResponse<FlashCard> getExistingFlashCard(string id)
+        public BaseResponse<FlashCard> getFlashCardById(string id)
         {
             FlashCard flashCard = _flashCardRepository.GetByIdAsync(id).Result;
             if (flashCard != null)
@@ -64,7 +64,7 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null, $"No flash card with id {id} found");
         }
 
-        public BaseResponse<List<FlashCard>> getBatchExistingFlashCard(string[] ids)
+        public BaseResponse<List<FlashCard>> getBatchFlashCardsByIds(string[] ids)
         {
             List<FlashCard> flashCards = _flashCardRepository.GetDocumentsByIdsAsync(ids).Result.ToList();
             if (flashCards != null)

@@ -32,9 +32,9 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
             return deserializedResponse.ResultItem;
         }
 
-        public FlashCard? getExistingFlashCard(string id)
+        public FlashCard? getFlashCardById(string id)
         {
-            var url = $"{URLEnums.FLASHCARDS}/getExistingFlashCard?{nameof(id)}={id}";
+            var url = $"{URLEnums.FLASHCARDS}/getFlashCardById?{nameof(id)}={id}";
 
             var response = _httpClient.GetAsync(url).Result;
 
@@ -44,9 +44,9 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
             return deserializedResponse.ResultItem;
         }
 
-        public FlashCard getFlashCard(string topic, int numberOfFlashCards)
+        public FlashCard generateFlashCard(string topic, int numberOfFlashCards)
         {
-            var url = $"{URLEnums.FLASHCARDS}/getFlashCard?{nameof(topic)}={topic}&{nameof(numberOfFlashCards)}={numberOfFlashCards}";
+            var url = $"{URLEnums.FLASHCARDS}/generateFlashCard?{nameof(topic)}={topic}&{nameof(numberOfFlashCards)}={numberOfFlashCards}";
 
             var response = _httpClient.PostAsync(url, null).Result;
 
