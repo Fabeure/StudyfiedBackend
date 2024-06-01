@@ -29,17 +29,19 @@ namespace StudyfiedBackend.Controllers.FlashCards
             topic = PromptHelper.addHelperToPrompt(topic, 0, 0);
             topic = PromptHelper.addHelperToPrompt(topic, 1, 1);
 
-            var geminiResponse = GenericGeminiClient.GetTextPrompt(_geminiClient, topic).Result;
-
-            if (geminiResponse != null && !string.IsNullOrEmpty(geminiResponse.Candidates[0].Content.Parts[0].Text))
+            bool isValidFlashCard = false;
+            FlashCard flashCard = new FlashCard(new Dictionary<string, string>());
+            try
             {
-                FlashCard flashCard = FlashCardsHelpers.processFlashCardResponse(geminiResponse);
-                if (!FlashCardsHelpers.validateFlashCardResult(flashCard, numberOfFlashcards)) {
-                    return generateFlashCard(topic, numberOfFlashcards);
+                while (!isValidFlashCard)
+                {
+                    var geminiResponse = GenericGeminiClient.GetTextPrompt(_geminiClient, topic).Result;
+                    flashCard = FlashCardsHelpers.processFlashCardResponse(geminiResponse);
+                    isValidFlashCard = FlashCardsHelpers.validateFlashCardResult(flashCard, numberOfFlashcards);
                 }
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Success, flashCard, "Succesfully fetched FlashCards");
             }
-            else
+            catch (Exception e)
             {
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null, "Error fetching flashcard, please try again");
             }
