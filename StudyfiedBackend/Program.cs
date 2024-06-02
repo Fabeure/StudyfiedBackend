@@ -89,6 +89,8 @@ builder.Services.AddSingleton<IMongoContext, MongoContext>();
 builder.Services.AddGeminiClient(config =>
 {
     config.ApiKey = builder.Configuration.GetValue<string>("GeminiApiKey");
+    config.TextBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash";
+    config.ImageBaseUrl = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash";
 });
 builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
