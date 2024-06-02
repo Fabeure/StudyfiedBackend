@@ -5,7 +5,7 @@ namespace StudyfiedBackend.Controllers.Resumes
 {
     public interface IResumesService
     {
-        public BaseResponse<Resume> getResume(string encodedpdf);
+        public BaseResponse<Resume> getResume(string[] encodedImages);
         public PrimitiveBaseResponse<bool> persistResume(Resume resumeWithUserId);
         public BaseResponse<Resume> getExistingResume(string id);
         public BaseResponse<List<Resume>> getBatchExistingResume(string[] id);
