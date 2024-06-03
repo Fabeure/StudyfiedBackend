@@ -18,9 +18,9 @@ namespace StudyfiedBackend.Controllers.Resumes
         }
 
         [HttpPost("getResume")]
-        public BaseResponse<Resume> get(string[] encodedImages)
+        public BaseResponse<Resume> get(string[] encodedImages, string token)
         {
-            return resumesService.getResume(encodedImages);
+            return resumesService.getResume(encodedImages, token);
         }
 
         [HttpPost("persistResume")]

@@ -15,10 +15,9 @@ namespace StudyfiedBackend.Controllers.ChatBot
         }
 
         [HttpGet("generateResponse")]
-        public BaseResponse<string> generateResponse(string conversation)
+        public BaseResponse<string> generateResponse(string conversation, string token)
         {
-            return _chatBotService.getChatResponse(conversation);
+            return _chatBotService.getChatResponse(conversation, token);
         }
-
     }
 }

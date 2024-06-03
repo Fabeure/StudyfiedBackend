@@ -1,4 +1,5 @@
-﻿using DotnetGeminiSDK.Model.Request;
+﻿using AspNetCore.Identity.MongoDbCore.Models;
+using DotnetGeminiSDK.Model.Request;
 using Newtonsoft.Json;
 using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.Models;
@@ -61,7 +62,9 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
 
         public FlashCard generateFlashCard(string topic, int numberOfFlashCards)
         {
-            var url = $"{URLEnums.FLASHCARDS}/generateFlashCard?{nameof(topic)}={topic}&{nameof(numberOfFlashCards)}={numberOfFlashCards}";
+            bool isTest = true;
+            string token = "testToken";
+            var url = $"{URLEnums.FLASHCARDS}/generateFlashCard?{nameof(topic)}={topic}&{nameof(numberOfFlashCards)}={numberOfFlashCards}&{nameof(token)}={token}";
 
             var response = _httpClient.PostAsync(url, null).Result;
 
@@ -73,7 +76,8 @@ namespace StudyfiedBackendUnitTests.Helpers.ServiceInterfaces.FlashCards
 
         public bool? persistFlashCard(FlashCard flashCardWithUserId)
         {
-            var url = $"{URLEnums.FLASHCARDS}/persistFlashCard";
+            string token = "testToken";
+            var url = $"{URLEnums.FLASHCARDS}/persistFlashCard?{nameof(token)}={token}";
 
             // Prepare JSON string from FlashCard object
             var jsonContent = JsonConvert.SerializeObject(flashCardWithUserId);

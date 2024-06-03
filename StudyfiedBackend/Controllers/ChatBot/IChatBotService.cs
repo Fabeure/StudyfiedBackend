@@ -3,6 +3,6 @@ namespace StudyfiedBackend.Controllers.ChatBot
 {
     public interface IChatBotService
     {
-        public BaseResponse<string> getChatResponse(string conversation);
+        public BaseResponse<string> getChatResponse(string conversation, string token);
     }
 }

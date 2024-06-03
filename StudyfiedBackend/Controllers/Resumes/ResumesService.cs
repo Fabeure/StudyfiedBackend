@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 using MongoDB.Driver;
+using StudyfiedBackend.Controllers.Authentication;
 
 
 namespace StudyfiedBackend.Controllers.Resumes
@@ -17,15 +18,27 @@ namespace StudyfiedBackend.Controllers.Resumes
     {
         private readonly IGeminiClient _geminiClient;
         private readonly IMongoRepository<Resume> _resumeRepository;
+        private readonly IAuthenticationService _authenticationService;
 
-        public ResumesService(IGeminiClient geminiClient, IMongoContext context)
+        public ResumesService(IGeminiClient geminiClient, IMongoContext context, IAuthenticationService authenticationService)
         {
             _geminiClient = geminiClient;
             _resumeRepository = context.GetRepository<Resume>();
+            _authenticationService = authenticationService;
         }
 
-        public BaseResponse<Resume> getResume(string[] encodedImages)
+        public BaseResponse<Resume> getResume(string[] encodedImages, string token)
         {
+
+            try
+            {
+                ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
+            }
+
             if (encodedImages.Any(base64image => string.IsNullOrEmpty(base64image)) || encodedImages.Count() == 0)
             {
                 return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "Invalid images, please try again.");
@@ -69,7 +82,7 @@ namespace StudyfiedBackend.Controllers.Resumes
             }
             else
             {
-                return getResume(encodedImages: encodedImages);
+                return getResume(encodedImages: encodedImages, token: token);
             }
         }
 
