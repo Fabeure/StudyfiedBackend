@@ -4,6 +4,7 @@ using StudyfiedBackend.BaseResponse;
 using StudyfiedBackend.DataLayer;
 using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 using MongoDB.Driver;
+using StudyfiedBackend.Controllers.Authentication;
 
 namespace StudyfiedBackend.Controllers.Quize
 {
@@ -11,15 +12,25 @@ namespace StudyfiedBackend.Controllers.Quize
     {
         private readonly IGeminiClient _geminiClient;
         private readonly IMongoRepository<Quiz> _quizRepository;
+        private readonly IAuthenticationService _authenticationService;
 
-        public QuizService(IGeminiClient geminiClient, IMongoContext context)
+        public QuizService(IGeminiClient geminiClient, IMongoContext context, IAuthenticationService authenticationService)
         {
             _geminiClient = geminiClient;
             _quizRepository = context.GetRepository<Quiz>();
+            _authenticationService = authenticationService;
         }
 
-        public BaseResponse<Quiz> getQuiz(string topic, string difficulty = "medium", int numberOfQuestions = 5)
+        public BaseResponse<Quiz> getQuiz(string topic, string difficulty, int numberOfQuestions, string token)
         {
+            try
+            {
+                ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
+            }
             try
             {
                 if (topic == null || topic == "")

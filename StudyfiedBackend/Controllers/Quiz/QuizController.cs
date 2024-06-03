@@ -16,9 +16,9 @@ namespace StudyfiedBackend.Controllers.Quize
         }
 
         [HttpPost("getQuiz")]
-        public BaseResponse<Quiz> get(string topic, string difficulty, int numberOfQuestion)
+        public BaseResponse<Quiz> get(string topic, string difficulty, int numberOfQuestion, string token)
         {
-            return quizService.getQuiz(topic, difficulty, numberOfQuestion);
+            return quizService.getQuiz(topic, difficulty, numberOfQuestion, token);
         }
 
         [HttpPost("persistQuiz")]

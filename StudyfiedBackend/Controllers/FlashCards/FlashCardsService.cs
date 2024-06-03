@@ -5,6 +5,7 @@ using StudyfiedBackend.Controllers.Gemini;
 using StudyfiedBackend.DataLayer;
 using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 using MongoDB.Driver;
+using StudyfiedBackend.Controllers.Authentication;
 
 namespace StudyfiedBackend.Controllers.FlashCards
 {
@@ -12,17 +13,28 @@ namespace StudyfiedBackend.Controllers.FlashCards
     {
         private readonly IGeminiClient _geminiClient;
         private readonly IMongoRepository<FlashCard> _flashCardRepository;
+        private readonly IAuthenticationService _authenticationService;
 
-        public FlashCardsService(IGeminiClient geminiClient, IMongoContext context)
+        public FlashCardsService(IGeminiClient geminiClient, IMongoContext context, IAuthenticationService authenticationService)
         {
             _geminiClient = geminiClient;
             _flashCardRepository = context.GetRepository<FlashCard>();
+            _authenticationService = authenticationService;
         }
-        public BaseResponse<FlashCard> generateFlashCard(string topic, int numberOfFlashcards)
+        public BaseResponse<FlashCard> generateFlashCard(string topic, int numberOfFlashcards, string token)
         {
             if (topic == null || topic == "")
             {
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null);
+            }
+
+            try
+            {
+                ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
             }
 
             topic = FlashCardsHelpers.insertNumberOfFlashCardsToTopic(topic, numberOfFlashcards);
@@ -46,8 +58,17 @@ namespace StudyfiedBackend.Controllers.FlashCards
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null, "Error fetching flashcard, please try again");
             }
         }
-        public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId)
+        public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId, string token)
         {
+            try
+            {
+                ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
+            }
+            catch (Exception ex)
+            {
+                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
+            }
+
             FlashCard addedFlashCard = _flashCardRepository.CreateAsync(flashCardWithUserId).Result;
             if (addedFlashCard != null)
             {
@@ -115,8 +136,17 @@ namespace StudyfiedBackend.Controllers.FlashCards
             return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Success, flashCards, "flashcards fetched!");
         }
 
-        public BaseResponse<List<FlashCard>> getFlashCardsByUserId(string userId)
+        public BaseResponse<List<FlashCard>> getFlashCardsByUserId(string userId, string token)
         {
+
+            try
+            {
+                ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
+            }
             var filter = Builders<FlashCard>.Filter.Eq("userId", userId);
             List<FlashCard> flashCards = _flashCardRepository.GetByFilter(filter).Result.ToList();
 

@@ -5,7 +5,7 @@ namespace StudyfiedBackend.Controllers.Quize
 {
     public interface IQuizService
     {
-        public BaseResponse<Quiz> getQuiz(string topic, string difficulty = "medium", int numberOfQuestion = 5);
+        public BaseResponse<Quiz> getQuiz(string topic, string difficulty, int numberOfQuestion, string token);
         public PrimitiveBaseResponse<bool> persistQuiz(Quiz quizWithUserId);
         public BaseResponse<Quiz> getExistingQuiz(string id);
         public BaseResponse<List<Quiz>> getBatchExistingQuiz(string[] id);
