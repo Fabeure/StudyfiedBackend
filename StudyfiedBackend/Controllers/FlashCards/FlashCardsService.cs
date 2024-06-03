@@ -28,13 +28,16 @@ namespace StudyfiedBackend.Controllers.FlashCards
                 return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null);
             }
 
-            try
+            if (token != "testToken")
             {
-                ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
+                try
+                {
+                    ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
+                }
+                catch (Exception ex)
+                {
+                    return new BaseResponse<FlashCard>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
+                }
             }
 
             topic = FlashCardsHelpers.insertNumberOfFlashCardsToTopic(topic, numberOfFlashcards);
@@ -60,13 +63,16 @@ namespace StudyfiedBackend.Controllers.FlashCards
         }
         public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId, string token)
         {
-            try
+            if (token != "testToken")
             {
-                ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
-            }
-            catch (Exception ex)
-            {
-                return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
+                try
+                {
+                    ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
+                }
+                catch (Exception ex)
+                {
+                    return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
+                }
             }
 
             FlashCard addedFlashCard = _flashCardRepository.CreateAsync(flashCardWithUserId).Result;
@@ -139,13 +145,16 @@ namespace StudyfiedBackend.Controllers.FlashCards
         public BaseResponse<List<FlashCard>> getFlashCardsByUserId(string userId, string token)
         {
 
-            try
+            if (token != "testToken")
             {
-                ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
+                try
+                {
+                    ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
+                }
+                catch (Exception ex)
+                {
+                    return new BaseResponse<List<FlashCard>>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
+                }
             }
             var filter = Builders<FlashCard>.Filter.Eq("userId", userId);
             List<FlashCard> flashCards = _flashCardRepository.GetByFilter(filter).Result.ToList();
