@@ -27,7 +27,7 @@ namespace StudyfiedBackend.Controllers.Quize
                     return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null, "Please enter a valid topic");
                 }
 
-                if (numberOfQuestions > 8 || numberOfQuestions == 0)
+                if (numberOfQuestions > 4 || numberOfQuestions == 0)
                 {
                     return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null, "Please enter a valid amount of questions: no more than 8");
                 }
@@ -39,7 +39,6 @@ namespace StudyfiedBackend.Controllers.Quize
 
                 while (!isValidQuestions)
                 {
-                    Thread.Sleep(500);
                     questions = QuizHelper.GenerateQuestion(topic, difficulty, numberOfQuestions, _geminiClient);
                     isValidQuestions = QuizHelper.isValidQuestions(questions: questions, numberOfQuestions: numberOfQuestions);
                 }
@@ -51,7 +50,6 @@ namespace StudyfiedBackend.Controllers.Quize
 
                     while (!isValidAnswers)
                     {
-                        Thread.Sleep(500);
                         answers = QuizHelper.GenerateResponses(question, _geminiClient);
                         isValidAnswers = QuizHelper.isValidAnswers(answers: answers);
                     }
@@ -62,7 +60,6 @@ namespace StudyfiedBackend.Controllers.Quize
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message.ToString());
-                // We should probably log a message here to keep track of things
                 return new BaseResponse<Quiz>(ResultCodeEnum.Failed, null, $"An error occurred: Please try again in a few seconds.");
             }
         }
