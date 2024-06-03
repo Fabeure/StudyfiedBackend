@@ -11,7 +11,7 @@ namespace StudyfiedBackend.Controllers.Gemini
         {
             var response = await geminiClient.TextPrompt(textPrompt);
 
-            if (isValidResponseContents(response))
+            if (response != null && isValidResponseContents(response))
             {
                 return response;
             }
