@@ -14,6 +14,7 @@ using StudyfiedBackend.DataLayer;
 using StudyfiedBackend.Models;
 using System.Text;
 using StudyfiedBackend.Controllers.Users;
+using StudyfiedBackend.Controllers.ChatBot;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,6 +83,7 @@ builder.Services.AddScoped<IResumesService, ResumesService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<IChatBotService, ChatBotService>();
 builder.Services.AddSingleton<IMongoContext, MongoContext>();
 
 builder.Services.AddGeminiClient(config =>
