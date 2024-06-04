@@ -28,8 +28,8 @@ var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
 {
     MongoDbSettings = new MongoDbSettings
     {
-        ConnectionString = "mongodb+srv://saber:saber@fabeure.tsdcgd5.mongodb.net/?retryWrites=true&w=majority&appName=Fabeure",
-        DatabaseName = "Studyfied"
+        ConnectionString = "mongodb+srv://StudyUser:StudyUser@studyfluxdb.f4b53e1.mongodb.net/?retryWrites=true&w=majority&appName=StudyFluxDB",
+        DatabaseName = "StudyFluxDB"
     },
     IdentityOptionsAction = options =>
     {
