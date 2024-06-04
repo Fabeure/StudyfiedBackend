@@ -27,6 +27,7 @@ namespace StudyfiedBackend.Controllers.Quize
                     questions.Add(new Question(question));
                 }
             }
+            questions = questions.Where(q => !string.IsNullOrWhiteSpace(q.content) && !string.IsNullOrWhiteSpace(q.content) && !q.content.All(char.IsDigit)).ToList();
             return questions;
         }
         public static List<Answer> GenerateResponses(Question question, IGeminiClient geminiClient)

@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 using MongoDB.Driver;
+using StudyfiedBackend.Controllers.Authentication;
 
 
 namespace StudyfiedBackend.Controllers.Resumes
@@ -17,43 +18,42 @@ namespace StudyfiedBackend.Controllers.Resumes
     {
         private readonly IGeminiClient _geminiClient;
         private readonly IMongoRepository<Resume> _resumeRepository;
+        private readonly IAuthenticationService _authenticationService;
 
-        public ResumesService(IGeminiClient geminiClient, IMongoContext context)
+        public ResumesService(IGeminiClient geminiClient, IMongoContext context, IAuthenticationService authenticationService)
         {
             _geminiClient = geminiClient;
             _resumeRepository = context.GetRepository<Resume>();
+            _authenticationService = authenticationService;
         }
 
-        //will recieve the string64 encoded pdf and return the resume object (each page is summarized independently)
-        public BaseResponse<Resume> getResume(string encodedPdf)
+        public BaseResponse<Resume> getResume(string[] encodedImages, string token)
         {
-            if (encodedPdf == null || encodedPdf == "")
+
+            try
             {
-                return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "empty pdf");
+                ApplicationUser caller = _authenticationService.AuthenticateTokenAndGetUser(token);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "USER NOT AUTHORIZED");
             }
 
-            PdfDocument doc = ResumesHelpers.getPdfFromString64(encodedPdf);
+            if (encodedImages.Any(base64image => string.IsNullOrEmpty(base64image)) || encodedImages.Count() == 0)
+            {
+                return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "Invalid images, please try again.");
+            }
 
             string prompt = PromptHelper.addHelperToPrompt("", 2, 0);
 
             Resume resumeResult = new Resume();
 
-            if (doc.Pages.Count == 0)
-            {
-                return new BaseResponse<Resume>(ResultCodeEnum.Failed, null, "no pages found");
-            }
-
-            for (int i = 0; i < doc.Pages.Count; i++)
+            for (int i = 0; i < encodedImages.Count(); i++)
             { 
-                Image image = doc.SaveAsImage(i, PdfImageType.Bitmap, 500, 500);
-
                 using (MemoryStream ms2 = new MemoryStream())
                 {
-                    image.Save(ms2, ImageFormat.Jpeg); // Use any desired image format
 
-                    byte[] imageBytes = ms2.ToArray();
-
-                    string base64image = Convert.ToBase64String(imageBytes);
+                    string base64image = encodedImages[i];
 
                     var geminiResponse = GenericGeminiClient.getImagePrompt(_geminiClient, prompt, base64image).Result;
 
@@ -75,13 +75,14 @@ namespace StudyfiedBackend.Controllers.Resumes
                     }
                 }
             }
-            if (ResumesHelpers.validateResumeObject(resumeResult, doc.Pages.Count))
+
+            if (ResumesHelpers.validateResumeObject(resumeResult, encodedImages.Count()))
             {
                 return new BaseResponse<Resume>(ResultCodeEnum.Success, resumeResult, "Succesfully fetched Resume");
             }
             else
             {
-                return getResume(encodedPdf: encodedPdf);
+                return getResume(encodedImages: encodedImages, token: token);
             }
         }
 

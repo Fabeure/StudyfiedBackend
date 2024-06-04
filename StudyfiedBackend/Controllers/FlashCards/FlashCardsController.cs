@@ -16,15 +16,15 @@ namespace StudyfiedBackend.Controllers.FlashCards
         }
 
         [HttpPost("generateFlashCard")]
-        public BaseResponse<FlashCard> generateFlashCard(string topic, int numberOfFlashCards)
+        public BaseResponse<FlashCard> generateFlashCard(string topic, int numberOfFlashCards, string token)
         {
-            return flashCardsService.generateFlashCard(topic, numberOfFlashCards);
+            return flashCardsService.generateFlashCard(topic, numberOfFlashCards, token);
         }
 
         [HttpPost("persistFlashCard")]
-        public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId)
+        public PrimitiveBaseResponse<bool> persistFlashCard(FlashCard flashCardWithUserId, string token)
         {
-            return flashCardsService.persistFlashCard(flashCardWithUserId);
+            return flashCardsService.persistFlashCard(flashCardWithUserId, token);
         }
 
         [HttpGet("getFlashCardById")]
@@ -34,9 +34,9 @@ namespace StudyfiedBackend.Controllers.FlashCards
         }
 
         [HttpGet("getFlashCardsByUserId")]
-        public BaseResponse<List<FlashCard>> getFlashCardsByUserId(string userId)
+        public BaseResponse<List<FlashCard>> getFlashCardsByUserId(string userId, string token)
         {
-            return flashCardsService.getFlashCardsByUserId(userId);
+            return flashCardsService.getFlashCardsByUserId(userId, token);
         }
 
         [HttpGet("getAllFlashCards")]

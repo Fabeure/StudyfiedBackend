@@ -2,7 +2,6 @@
 using StudyfiedBackend.DataLayer;
 using StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository;
 using StudyfiedBackend.Models;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace StudyfiedBackend.Controllers.Authentication
 {
