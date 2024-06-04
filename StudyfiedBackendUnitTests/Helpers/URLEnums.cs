@@ -9,5 +9,6 @@ namespace StudyfiedBackendUnitTests.Helpers
     public static class URLEnums
     {
         public static string FLASHCARDS = "api/FlashCards";
+        public static string QUIZ = "api/Quiz";
     }
 }
