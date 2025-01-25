@@ -28,7 +28,7 @@ var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
 {
     MongoDbSettings = new MongoDbSettings
     {
-        ConnectionString = "mongodb+srv://Fabeure:Fabeure@fabeure.tsdcgd5.mongodb.net/",
+        ConnectionString = "mongodb+srv://<db_username>:<db_password>@fabeure.tsdcgd5.mongodb.net/?retryWrites=true&w=majority&appName=Fabeure",
         DatabaseName = "Fabeure"
     },
     IdentityOptionsAction = options =>
