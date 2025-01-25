@@ -29,7 +29,7 @@ var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
     MongoDbSettings = new MongoDbSettings
     {
         ConnectionString = "mongodb+srv://Fabeure:Fabeure@fabeure.tsdcgd5.mongodb.net/",
-        DatabaseName = "StudyFluxDB"
+        DatabaseName = "Fabeure"
     },
     IdentityOptionsAction = options =>
     {
