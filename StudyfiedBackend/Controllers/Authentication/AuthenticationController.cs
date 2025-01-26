@@ -42,11 +42,11 @@ namespace StudyfiedBackend.Controllers.Authentication
 
                 userExists = new ApplicationUser
                 {
-                    Name = request.FullName,
+                    Name = request.Name,
+                    Surname = request.Surname,
                     Email = request.Email,
                     ConcurrencyStamp = Guid.NewGuid().ToString(),
                     UserName = request.Email,
-
                 };
                 var createUserResult = await _userManager.CreateAsync(userExists, request.Password);
                 if (!createUserResult.Succeeded) return new RegisterResponse { Message = $"Create user failed {createUserResult?.Errors?.First()?.Description}", Success = false };
@@ -120,6 +120,9 @@ namespace StudyfiedBackend.Controllers.Authentication
                     Success = true,
                     UserId = user.Id.ToString(),
                     Name = user.Name,
+                    Surname = user.Surname,
+                    Favorites = user.Favorites,
+                    ProfilePictureBase64 = user.ProfilePictureBase64,
                 };
             }
             catch (Exception ex)

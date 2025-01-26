@@ -30,10 +30,42 @@ namespace StudyfiedBackend.DataLayer.Repositories.GenericMongoRepository
 
         public async Task<bool> UpdateAsync(string id, T entity)
         {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
+
             var filter = Builders<T>.Filter.Eq("Id", id);
-            var updateResult = await _collection.ReplaceOneAsync(filter, entity);
-            return updateResult.IsModifiedCountAvailable;
+
+            var updates = new List<UpdateDefinition<T>>();
+            var updateDefinitionBuilder = Builders<T>.Update;
+
+            // Iterate through the properties of the entity
+            foreach (var property in typeof(T).GetProperties())
+            {
+                var value = property.GetValue(entity);
+
+                // Skip null or default values
+                if (value != null && !IsDefaultValue(value, property.PropertyType))
+                {
+                    updates.Add(updateDefinitionBuilder.Set(property.Name, value));
+                }
+            }
+
+            if (!updates.Any())
+                throw new ArgumentException("No updates provided in the entity.", nameof(entity));
+
+            var combinedUpdate = updateDefinitionBuilder.Combine(updates);
+
+            var updateResult = await _collection.UpdateOneAsync(filter, combinedUpdate);
+
+            return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
         }
+
+        // Helper method to check for default values
+        private bool IsDefaultValue(object value, Type type)
+        {
+            return value.Equals(type.IsValueType ? Activator.CreateInstance(type) : null);
+        }
+
 
         public async Task<bool> DeleteAsync(string id)
         {
