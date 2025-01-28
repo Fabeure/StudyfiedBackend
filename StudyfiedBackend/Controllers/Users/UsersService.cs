@@ -95,5 +95,18 @@ namespace StudyfiedBackend.Controllers.Users
                 return new PrimitiveBaseResponse<bool>(ResultCodeEnum.Failed, null, $"Error occurred: {ex.Message}");
             }
         }
+
+        public BaseResponse<ApplicationUser> getUserByToken(string token)
+        {
+            try
+            {
+                var user = _authenticationService.AuthenticateTokenAndGetUser(token);
+                return new BaseResponse<ApplicationUser>(ResultCodeEnum.Success, user);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<ApplicationUser>(ResultCodeEnum.Failed, null, "invalid Token");
+            }
+        }
     }
 }

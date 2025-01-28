@@ -20,6 +20,12 @@ namespace StudyfiedBackend.Controllers.Users
             return _usersService.getUserById(id);
         }
 
+        [HttpGet("getUserByToken")]
+        public BaseResponse<ApplicationUser> getUserByToken(string token)
+        {
+            return _usersService.getUserByToken(token);
+        }
+
         [HttpDelete("deleteUserById")]
         public PrimitiveBaseResponse<bool> deleteUserById(string id, string token)
         {
