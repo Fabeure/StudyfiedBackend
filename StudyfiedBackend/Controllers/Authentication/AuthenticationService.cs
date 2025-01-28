@@ -24,6 +24,17 @@ namespace StudyfiedBackend.Controllers.Authentication
             }
             return user;
         }
+
+        public bool ValidatePassword(string plainPassword, string hashedPassword)
+        {
+            // Compare the plain-text password with the hashed password
+            return BCrypt.Net.BCrypt.Verify(plainPassword, hashedPassword);
+        }
+
+        public string HashPassword(string plainPassword)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(plainPassword);
+        }
     }
 
 }

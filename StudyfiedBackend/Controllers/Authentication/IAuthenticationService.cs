@@ -8,5 +8,7 @@ namespace StudyfiedBackend.Controllers.Authentication
     public interface IAuthenticationService
     {
         public ApplicationUser AuthenticateTokenAndGetUser(string token);
+        bool ValidatePassword(string plainPassword, string hashedPassword);
+        string HashPassword(string plainPassword);
     }
 }

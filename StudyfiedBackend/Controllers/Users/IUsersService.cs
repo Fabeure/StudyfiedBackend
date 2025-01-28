@@ -8,5 +8,6 @@ namespace StudyfiedBackend.Controllers.Users
         public BaseResponse<ApplicationUser> getUserById(string id);
         public PrimitiveBaseResponse<bool> deleteUserById(string id, string token);
         public PrimitiveBaseResponse<bool> updateUserById(string id, ApplicationUser user, string token);
+        public PrimitiveBaseResponse<bool> updateUserPassword(string id, string oldPassword, string newPassword);
     }
 }

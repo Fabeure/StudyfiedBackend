@@ -31,5 +31,11 @@ namespace StudyfiedBackend.Controllers.Users
         {
             return _usersService.updateUserById(id, updatedUser, token);
         }
+
+        [HttpPatch("updatePasswordById")]
+        public PrimitiveBaseResponse<bool> updateUserById(string id, string oldPassword, string newPassword)
+        {
+            return _usersService.updateUserPassword(id, oldPassword, newPassword);
+        }
     }
 }
