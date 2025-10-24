@@ -15,6 +15,9 @@ using StudyfiedBackend.Models;
 using System.Text;
 using StudyfiedBackend.Controllers.Users;
 using StudyfiedBackend.Controllers.ChatBot;
+using DotnetGeminiSDK.Client.Interfaces;
+using DotnetGeminiSDK.Client;
+using DotnetGeminiSDK.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,10 +89,26 @@ builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IChatBotService, ChatBotService>();
 builder.Services.AddSingleton<IMongoContext, MongoContext>();
 
-builder.Services.AddGeminiClient(config =>
+
+builder.Services.AddSingleton<IGeminiClient>(provider =>
 {
-    config.ApiKey = builder.Configuration.GetValue<string>("GeminiApiKey");
+    var apiKey = builder.Configuration.GetValue<string>("GeminiApiKey");
+    var config = new GoogleGeminiConfig
+    {
+        ApiKey = apiKey,
+        DefaultTextModel = "gemini-2.5-flash-lite-preview-09-2025",
+
+        // CRITICAL: Override ALL base URLs to match your model
+        TextBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite-preview-09-2025",
+        ImageBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite-preview-09-2025",
+        ModelBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models",
+        EmbeddingBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models",
+
+        DefaultEmbeddingModel = "models/embedding-001"
+    };
+    return new GeminiClient(config);
 });
+
 builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
     builder => builder
